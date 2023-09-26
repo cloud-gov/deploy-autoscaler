@@ -17,7 +17,7 @@ jobs:
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-development
     params: &deploy-params
-      manifest: templates/app-autoscaler.yml
+      manifest: app-autoscaler-release/templates/app-autoscaler.yml
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:

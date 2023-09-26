@@ -1,4 +1,3 @@
-scaling-dev.yml
 - type: replace
   path: /instance_groups/name=scalingengine/instances
   value: 1
