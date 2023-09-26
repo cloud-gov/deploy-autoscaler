@@ -1,0 +1,65 @@
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nats.service.cf.internal
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=reverse-log-proxy.service.cf.internal
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.nats.service.cf.internal
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=logcache
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=log-cache.service.cf.internal
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: nats.service.cf.internal
+    targets:
+    - deployment: ((cf-deployment-name))
+      domain: bosh
+      instance_group: nats
+      network: default
+      query: '*'
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: reverse-log-proxy.service.cf.internal
+    targets:
+    - deployment: ((cf-deployment-name))
+      domain: bosh
+      instance_group: log-api
+      network: default
+      query: '*'
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: _.nats.service.cf.internal
+    targets:
+    - deployment: ((cf-deployment-name))
+      domain: bosh
+      instance_group: nats
+      network: default
+      query: _
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: logcache
+    targets:
+    - deployment: ((cf-deployment-name))
+      domain: bosh
+      instance_group: log-cache
+      network: default
+      query: '*'
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: log-cache.service.cf.internal
+    targets:
+    - deployment: ((cf-deployment-name))
+      domain: bosh
+      instance_group: log-cache
+      network: default
+      query: '*'

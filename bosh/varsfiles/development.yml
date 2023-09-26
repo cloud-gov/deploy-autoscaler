@@ -1,0 +1,5 @@
+system_domain: dev.us-gov-west-1.aws-us-gov.cloud.gov
+cf_client_id: autoscaler_client_id
+cf-deployment-name: cf-development
+skip_ssl_validation: true
+deployment_name: app-autoscaler
