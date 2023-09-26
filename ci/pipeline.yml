@@ -21,19 +21,19 @@ jobs:
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:
-      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-dev.yml \
-      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-dev.yml \
-      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-dev.yml \
-      - app-autoscaler-release/operations/add-extra-plan.yml \
-      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-dev.yml \
-      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-dev.yml \
-      - autoscaler-manifests/bosh/opsfiles/external-db.yml \
-      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml \
-      - app-autoscaler-release/operations/remove-metricsserver.yml \
-      - app-autoscaler-release/operations/remove-metricsgateway.yml \
-      - app-autoscaler-release/operations/enable-scheduler-logging.yml \
-      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml \
-      - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml 
+      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-dev.yml
+      - app-autoscaler-release/operations/add-extra-plan.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml
+      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
+      - app-autoscaler-release/operations/remove-metricsserver.yml
+      - app-autoscaler-release/operations/remove-metricsgateway.yml
+      - app-autoscaler-release/operations/enable-scheduler-logging.yml
+      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/development.yml
       - terraform-secrets/terraform.yml
@@ -52,7 +52,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: initial #main
+    branch: main
     paths:
     - ci/*
     - bosh/*
