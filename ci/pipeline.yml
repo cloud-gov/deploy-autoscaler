@@ -15,21 +15,25 @@ jobs:
       trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
-  - put: cf-deployment-development
+  - put: autoscaler-deployment-development
     params: &deploy-params
       manifest: templates/app-autoscaler.yml
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:
-      - router-main/router_main.yml
-      - app-autoscaler-release/operations/rename-network-and-deployment.yml
-      - autoscaler-manifests/bosh/opsfiles/use-s3-blobstore.yml
-      - app-autoscaler-release/operations/use-external-dbs.yml
-      - app-autoscaler-release/operations/stop-skipping-tls-validation.yml
-      - app-autoscaler-release/operations/set-bbs-active-key.yml
-      - app-autoscaler-release/operations/enable-service-discovery.yml
-      - autoscaler-manifests/bosh/opsfiles/remove-routing-components-for-transition.yml
-      - autoscaler-manifests/bosh/opsfiles/add-autoscaler-client.yml
+      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-dev.yml \
+      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-dev.yml \
+      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-dev.yml \
+      - app-autoscaler-release/operations/add-extra-plan.yml \
+      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-dev.yml \
+      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-dev.yml \
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml \
+      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml \
+      - app-autoscaler-release/operations/remove-metricsserver.yml \
+      - app-autoscaler-release/operations/remove-metricsgateway.yml \
+      - app-autoscaler-release/operations/enable-scheduler-logging.yml \
+      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml \
+      - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml 
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/development.yml
       - terraform-secrets/terraform.yml
@@ -39,6 +43,7 @@ resources:
 - name: app-autoscaler-release
   type: git
   source:
+    commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: https://github.com/cloudfoundry/app-autoscaler-release
     branch: main
     tag_filter: "v*"
@@ -47,7 +52,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: initial #main
     paths:
     - ci/*
     - bosh/*
@@ -74,3 +79,24 @@ resources:
     client_secret: ((development-bosh-client-secret))
     ca_cert: ((bosh-ca-cert))
     deployment: app-autoscaler
+
+
+resource_types:
+#- name: slack-notification
+#  type: docker-image
+#  source:
+#    repository: cfcommunity/slack-notification-resource
+
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+
+- name: s3-iam
+  type: registry-image
+  source:
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: s3-resource
+    aws_region: us-gov-west-1
+    tag: latest
