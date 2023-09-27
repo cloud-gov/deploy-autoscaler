@@ -19,48 +19,6 @@ Overall instructions for install are at https://github.com/cloudfoundry/app-auto
 
 See https://github.com/cloud-gov/cg-provision/tree/autoscaler for changes made.
 
-Point pipeline to this branch:
-
-```
-resources:
-  resource cg-provision-repo-development has changed:
-  name: cg-provision-repo-development
-  source:
--   branch: main
-+   branch: autoscaler
-    commit_verification_keys: ((cloud-gov-pgp-keys))
-    uri: https://github.com/cloud-gov/cg-provision
-  type: git
-```
-
-### Fly command to set the pipeline for cg-provision
-
-Temporarily set the cg-provision pipeline to point to the `autoscaler` branch for development:
-
-```
-fly -t main set-pipeline -p terraform-provision -c ~/projects/cg-provision_2/cg-provision/ci/pipeline.yml -l ~/projects/s3/concourse-credentials/cg-provision.yml
-```
-
-TODO: merge to master and undo override to `branch:` and repush pipeline to either dispose of the database or after a merge to main because we are keeping this.
-
-Database outputs from `s3://terraform-state/development/state.yml`:
-
-```
-  cf_as_rds_engine: postgres
-  cf_as_rds_host: development-redacted.redacted.us-gov-west-1.rds.amazonaws.com
-  cf_as_rds_password: TmREDACTEDWC
-  cf_as_rds_port: 5432
-  cf_as_rds_url: development-redacted.redacted.us-gov-west-1.rds.amazonaws.com:5432
-  cf_as_rds_username: redacted
-```
-
-This works:
-
-```
-psql "postgres://redacted:TmREDACTEDWC@development-redacted.redacted.us-gov-west-1.rds.amazonaws.com:5432/autoscaler"
-
-```
-
 
 
 ## 2. Create UAA client
