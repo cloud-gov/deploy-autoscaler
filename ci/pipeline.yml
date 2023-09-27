@@ -1,0 +1,102 @@
+---
+jobs:
+- name: deploy-as-development
+  serial: true
+  plan:
+  - in_parallel:
+    - get: app-autoscaler-release
+#      trigger: true
+    - get: autoscaler-manifests
+      resource: autoscaler-manifests
+      trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-development
+    - get: cf-stemcell-jammy
+      trigger: true
+  - task: terraform-secrets
+    file: autoscaler-manifests/ci/terraform-secrets.yml
+  - put: autoscaler-deployment-development
+    params: &deploy-params
+      manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      stemcells:
+      - cf-stemcell-jammy/*.tgz
+      ops_files:
+      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-dev.yml
+      - app-autoscaler-release/operations/add-extra-plan.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml
+      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
+      - app-autoscaler-release/operations/remove-metricsserver.yml
+      - app-autoscaler-release/operations/remove-metricsgateway.yml
+      - app-autoscaler-release/operations/enable-scheduler-logging.yml
+      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
+      - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml
+      vars_files:
+      - autoscaler-manifests/bosh/varsfiles/development.yml
+      - terraform-secrets/terraform.yml
+
+
+resources:
+- name: app-autoscaler-release
+  type: git
+  source:
+    commit_verification_keys: ((cloud-gov-pgp-keys))
+    uri: https://github.com/cloudfoundry/app-autoscaler-release
+    branch: main
+    tag_filter: "v*"
+
+- name: autoscaler-manifests
+  type: git
+  source:
+    uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
+    branch: main
+    paths:
+    - ci/*
+    - bosh/*
+
+- name: terraform-yaml-development
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-development))
+    region_name: ((aws-region))
+
+
+- name: cf-stemcell-jammy
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-jammy-go_agent
+
+
+- name: autoscaler-deployment-development
+  type: bosh-deployment
+  source:
+    target: ((development-bosh-target))
+    client: ((development-bosh-client))
+    client_secret: ((development-bosh-client-secret))
+    ca_cert: ((bosh-ca-cert))
+    deployment: app-autoscaler
+
+
+resource_types:
+#- name: slack-notification
+#  type: docker-image
+#  source:
+#    repository: cfcommunity/slack-notification-resource
+
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+
+- name: s3-iam
+  type: registry-image
+  source:
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: s3-resource
+    aws_region: us-gov-west-1
+    tag: latest
