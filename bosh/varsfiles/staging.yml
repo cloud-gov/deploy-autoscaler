@@ -1,0 +1,5 @@
+system_domain: fr-stage.cloud.gov
+cf_client_id: autoscaler_client_id
+cf-deployment-name: cf-staging
+skip_ssl_validation: true
+deployment_name: app-autoscaler

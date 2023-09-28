@@ -1,0 +1,5 @@
+system_domain: fr.cloud.gov
+cf_client_id: autoscaler_client_id
+cf-deployment-name: cf-production
+skip_ssl_validation: true
+deployment_name: app-autoscaler
