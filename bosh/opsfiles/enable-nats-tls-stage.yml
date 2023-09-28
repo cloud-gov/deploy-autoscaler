@@ -1,0 +1,146 @@
+# routing api from certs
+# scalingengine
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# metricsforwarder
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# scheduler
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# operator
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=operator/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# apiserver + broker
+
+- type: replace
+  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=apiserver/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=apiserver/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# metricsgateway
+- type: replace
+  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# metricsserver
+- type: replace
+  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+
+# eventgenerator
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: ((/bosh/cf-staging/nats_client_cert.certificate))
+      client_key: ((/bosh/cf-staging/nats_client_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/consumes/nats
+
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/consumes/nats-tls?
+  value:
+    from: nats-tls
+    deployment: ((cf-deployment-name))
+

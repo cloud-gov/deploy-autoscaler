@@ -5,7 +5,7 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-#      trigger: true
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
