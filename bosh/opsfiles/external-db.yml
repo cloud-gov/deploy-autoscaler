@@ -1,6 +1,9 @@
 - type: remove
   path: /instance_groups/name=postgres
 
+- type: remove
+  path: /releases/name=postgres
+
 # asactors/scalingengine
 - type: replace
   path: /instance_groups/name=scalingengine/jobs/name=scalingengine/properties/autoscaler/scalingengine_db

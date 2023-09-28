@@ -39,6 +39,50 @@ jobs:
       - terraform-secrets/terraform.yml
 
 
+- name: deploy-as-staging
+  serial: true
+  plan:
+  - in_parallel:
+    - get: app-autoscaler-release
+      passed: [deploy-as-development]
+      trigger: true
+    - get: autoscaler-manifests
+      resource: autoscaler-manifests
+      passed: [deploy-as-development]
+      trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-staging
+    - get: cf-stemcell-jammy
+      passed: [deploy-as-development]
+      trigger: true
+  - task: terraform-secrets
+    file: autoscaler-manifests/ci/terraform-secrets.yml
+  - put: autoscaler-deployment-staging
+    params: 
+      manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      stemcells:
+      - cf-stemcell-jammy/*.tgz
+      ops_files:
+      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-stage.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-stage.yml
+      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-stage.yml
+      - app-autoscaler-release/operations/add-extra-plan.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-stage.yml
+      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-stage.yml
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml
+      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
+      - app-autoscaler-release/operations/remove-metricsserver.yml
+      - app-autoscaler-release/operations/remove-metricsgateway.yml
+      - app-autoscaler-release/operations/enable-scheduler-logging.yml
+      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-stage.yml
+      - autoscaler-manifests/bosh/opsfiles/scaling-stage.yml
+      vars_files:
+      - autoscaler-manifests/bosh/varsfiles/staging.yml
+      - terraform-secrets/terraform.yml
+
+
+
+
 resources:
 - name: app-autoscaler-release
   type: git
@@ -65,6 +109,15 @@ resources:
     region_name: ((aws-region))
 
 
+- name: terraform-yaml-staging
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-staging))
+    region_name: ((aws-region))
+
+
+
 - name: cf-stemcell-jammy
   type: bosh-io-stemcell
   source:
@@ -74,12 +127,21 @@ resources:
 - name: autoscaler-deployment-development
   type: bosh-deployment
   source:
-    target: ((development-bosh-target))
-    client: ((development-bosh-client))
-    client_secret: ((development-bosh-client-secret))
+    target: ((bosh.development.environment))
+    client: ((bosh.development.client))
+    client_secret: ((bosh.development.client-secret))
     ca_cert: ((bosh-ca-cert))
     deployment: app-autoscaler
 
+
+- name: autoscaler-deployment-staging
+  type: bosh-deployment
+  source:
+    target: ((bosh.staging.environment))
+    client: ((bosh.staging.client))
+    client_secret: ((bosh.staging.client-secret))
+    ca_cert: ((bosh-ca-cert))
+    deployment: app-autoscaler
 
 resource_types:
 #- name: slack-notification
