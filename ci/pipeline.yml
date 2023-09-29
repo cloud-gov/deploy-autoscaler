@@ -37,6 +37,24 @@ jobs:
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/development.yml
       - terraform-secrets/terraform.yml
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform-news'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform-news'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 - name: deploy-as-staging
@@ -79,7 +97,84 @@ jobs:
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/staging.yml
       - terraform-secrets/terraform.yml
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform-news'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform-news'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
+- name: deploy-as-production
+  serial: true
+  plan:
+  - in_parallel:
+    - get: app-autoscaler-release
+      passed: [deploy-as-staging]
+      trigger: true
+    - get: autoscaler-manifests
+      resource: autoscaler-manifests
+      passed: [deploy-as-staging]
+      trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-production
+    - get: cf-stemcell-jammy
+      passed: [deploy-as-staging]
+      trigger: true
+  - task: terraform-secrets
+    file: autoscaler-manifests/ci/terraform-secrets.yml
+  - put: autoscaler-deployment-production
+    params: 
+      manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      stemcells:
+      - cf-stemcell-jammy/*.tgz
+      ops_files:
+      - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-prod.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-prod.yml
+      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-prod.yml
+      - app-autoscaler-release/operations/add-extra-plan.yml
+      - autoscaler-manifests/bosh/opsfiles/enable-log-cache-prod.yml
+      - autoscaler-manifests/bosh/opsfiles/log-cache-syslog-server-prod.yml
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml
+      - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
+      - app-autoscaler-release/operations/remove-metricsserver.yml
+      - app-autoscaler-release/operations/remove-metricsgateway.yml
+      - app-autoscaler-release/operations/enable-scheduler-logging.yml
+      - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
+      - autoscaler-manifests/bosh/opsfiles/scaling-prod.yml
+      vars_files:
+      - autoscaler-manifests/bosh/varsfiles/production.yml
+      - terraform-secrets/terraform.yml
+
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed CF App Autoscaler on prod
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform-news'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy CF App Autoscaler on prod
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: '#cg-platform'
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 
@@ -116,6 +211,13 @@ resources:
     versioned_file: ((tf-state-file-staging))
     region_name: ((aws-region))
 
+- name: terraform-yaml-production
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-production))
+    region_name: ((aws-region))
+
 
 
 - name: cf-stemcell-jammy
@@ -143,11 +245,25 @@ resources:
     ca_cert: ((bosh-ca-cert))
     deployment: app-autoscaler
 
+- name: autoscaler-deployment-production
+  type: bosh-deployment
+  source:
+    target: ((bosh.production.environment))
+    client: ((bosh.production.client))
+    client_secret: ((bosh.production.client-secret))
+    ca_cert: ((bosh-ca-cert))
+    deployment: app-autoscaler
+
+- name: slack
+  type: slack-notification
+  source:
+    url: ((slack-webhook-url))
+
 resource_types:
-#- name: slack-notification
-#  type: docker-image
-#  source:
-#    repository: cfcommunity/slack-notification-resource
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
 
 - name: bosh-deployment
   type: docker-image
