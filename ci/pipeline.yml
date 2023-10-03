@@ -43,7 +43,7 @@ jobs:
       text: |
         :white_check_mark: Successfully deployed CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-success))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
   on_failure:
@@ -52,7 +52,7 @@ jobs:
       text: |
         :x: FAILED to deploy CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-success))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -103,7 +103,7 @@ jobs:
       text: |
         :white_check_mark: Successfully deployed CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-success))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
   on_failure:
@@ -112,7 +112,7 @@ jobs:
       text: |
         :x: FAILED to deploy CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-success))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -163,7 +163,7 @@ jobs:
       text: |
         :white_check_mark: Successfully deployed CF App Autoscaler on prod
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-success))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
   on_failure:
@@ -172,7 +172,7 @@ jobs:
       text: |
         :x: FAILED to deploy CF App Autoscaler on prod
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform'
+      channel: ((slack-channel-failure))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
