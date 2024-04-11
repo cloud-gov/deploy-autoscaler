@@ -38,3 +38,7 @@
 - type: replace
   path: /instance_groups/name=metricsforwarder/vm_type
   value: m5.large
+
+#Misc - not worth its own ops file
+- type: remove
+  path: /releases/name=postgres
