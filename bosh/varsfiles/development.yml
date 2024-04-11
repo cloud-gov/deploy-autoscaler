@@ -3,3 +3,5 @@ cf_client_id: autoscaler_client_id
 cf-deployment-name: cf-development
 skip_ssl_validation: true
 deployment_name: app-autoscaler
+eventgenerator_uaa_client_id: firehose_exporter
+eventgenerator_uaa_skip_ssl_validation: true
