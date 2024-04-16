@@ -58,7 +58,7 @@ jobs:
 
 
 
-- name: acceptance-tests-development
+- name: acceptance-tests-broker-development
   plan:
   - in_parallel:
     - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
@@ -67,14 +67,31 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
     params:
-      GOLANG_VERSION: 1.21 # ((golang_version))
-      ACCEPTANCE_TESTS_VERSION: 12.1.1 #((acceptance_tests_version))
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
       CF_ADMIN_USER: ((cf.development.admin_user))
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: broker
 
+
+- name: acceptance-tests-api-development
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-broker-development] 
+  - task: acceptance-tests
+    file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: api
 
 
 

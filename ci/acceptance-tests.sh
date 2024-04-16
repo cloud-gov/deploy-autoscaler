@@ -2,12 +2,9 @@
 
 set -eu
 
-echo "GOLANG_VERSION passed in is: ${GOLANG_VERSION}"
 echo "This is the installed go version: $(go version)"
 echo "This is the installed cf cli version: $(cf -v)"
-
-echo "ACCEPTANCE_TESTS_VERSION is ${ACCEPTANCE_TESTS_VERSION}"
-
+echo "This is the ACCEPTANCE_TESTS_VERSION version: ${ACCEPTANCE_TESTS_VERSION}"
 
 
 # Get the tarball with the test
@@ -44,6 +41,6 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
 
 # Run the actual test, pick one: {broker, api, app}
-./bin/test broker
+./bin/test ${COMPONENT_TO_TEST}
 
 echo "~FIN~"
