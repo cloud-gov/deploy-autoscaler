@@ -12,10 +12,9 @@ echo "ACCEPTANCE_TESTS_VERSION is ${ACCEPTANCE_TESTS_VERSION}"
 
 # Get the tarball with the test
 wget -O app-autoscaler-acceptance-tests.tgz  https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${ACCEPTANCE_TESTS_VERSION}/app-autoscaler-acceptance-tests-v${ACCEPTANCE_TESTS_VERSION}.tgz
-tar -xvzf app-autoscaler-acceptance-tests.tgz 
+tar -xzf app-autoscaler-acceptance-tests.tgz 
 
 cd acceptance
-ls -alh
 
 cat > integration_config.json <<EOF
 {
