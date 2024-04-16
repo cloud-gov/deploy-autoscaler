@@ -16,4 +16,4 @@ outputs:
 - name: someoutput
 
 run:
-  path: autoscaler-manifests/ci/acceptance-tests.sh
+  path: autoscaler-manifests-test/ci/acceptance-tests.sh #TODO: switch this back to autoscaler-manifests
