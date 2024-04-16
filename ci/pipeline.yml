@@ -62,6 +62,7 @@ jobs:
   plan:
   - in_parallel:
     - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
+      trigger: true
       # passed: [deploy-as-development] $TODO: turn this back on
   - task: acceptance-tests
     file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
