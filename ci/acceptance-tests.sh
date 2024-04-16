@@ -16,13 +16,12 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 
 cd acceptance
 
-
 # Set the config file needed for the acceptance tests
 echo "Writing config file for acceptance tests to acceptance/integration_config.json, do not ever print this out into concourse logs!"
 
 cat > integration_config.json <<EOF
 {
-  "api": "x${CF_API}",
+  "api": "${CF_API}",
   "admin_user": "${CF_ADMIN_USER}",
   "admin_password": "${CF_ADMIN_PASSWORD}",
   "apps_domain": "${CF_APPS_DOMAIN}",
@@ -40,6 +39,11 @@ cat > integration_config.json <<EOF
 EOF
 export CONFIG=$PWD/integration_config.json
 
+# Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
+export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
+
+
+# Run the actual test, pick one: {broker, api, app}
 ./bin/test broker
 
 echo "~FIN~"
