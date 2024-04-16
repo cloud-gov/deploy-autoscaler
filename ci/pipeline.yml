@@ -69,7 +69,11 @@ jobs:
     params:
       GOLANG_VERSION: 1.21 # ((golang_version))
       ACCEPTANCE_TESTS_VERSION: 12.1.1 #((acceptance_tests_version))
-
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
 
 
 
