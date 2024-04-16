@@ -61,10 +61,10 @@ jobs:
 - name: acceptance-tests-development
   plan:
   - in_parallel:
-    - get: autoscaler-manifests-test
-      # passed: [deploy-as-development]
+    - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
+      # passed: [deploy-as-development] $TODO: turn this back on
   - task: acceptance-tests
-    file: autoscaler-manifests/ci/acceptance-tests.yml
+    file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
     params:
       GOLANG_VERSION: 1.21 # ((golang_version))
 
