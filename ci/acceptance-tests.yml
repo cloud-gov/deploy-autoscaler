@@ -8,7 +8,7 @@ image_resource:
     aws_secret_access_key: ((ecr_aws_secret))
     repository: general-task
     aws_region: us-gov-west-1
-    tag: ((harden-concourse-task-tag))   #/concourse/main/harden-concourse-task-tag has 1.0.33, latest in ECR is 1.0.62
+    tag: latest   #/concourse/main/harden-concourse-task-tag has 1.0.33, latest in ECR is 1.0.62
 
 inputs:
 - name: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
