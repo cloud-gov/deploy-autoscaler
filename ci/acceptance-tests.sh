@@ -21,4 +21,28 @@ ls -alh
 
 
 
+cat > integration_config.json <<EOF
+{
+  "api": "something",
+  "admin_user": "rare",
+  "admin_password": "something,
+  "apps_domain": "something",
+  "skip_ssl_validation": true,
+  "use_http": false,
+
+  "service_name": "app-autoscaler",
+  "service_plan": "autoscaler-free-plan",
+  "aggregate_interval": 120,
+  "health_endpoints_basic_auth_enabled": true,
+
+  "autoscaler_api": "something",
+  "service_offering_enabled": true
+}
+EOF
+export CONFIG=$PWD/integration_config.json
+
+
+
+
+
 echo "~FIN~"
