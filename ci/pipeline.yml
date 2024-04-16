@@ -64,7 +64,7 @@ jobs:
     - get: autoscaler-manifests
       passed: [deploy-as-development]
   - task: acceptance-tests
-    file: cf-manifests/ci/acceptance-tests.yml
+    file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
       GOLANG_VERSION: 1.21 # ((golang_version))
 
@@ -206,7 +206,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: cw #main
     paths:
     - ci/*
     - bosh/*
