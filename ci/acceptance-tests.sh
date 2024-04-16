@@ -22,7 +22,7 @@ echo "Writing config file for acceptance tests to acceptance/integration_config.
 
 cat > integration_config.json <<EOF
 {
-  "api": "${CF_API}",
+  "api": "x${CF_API}",
   "admin_user": "${CF_ADMIN_USER}",
   "admin_password": "${CF_ADMIN_PASSWORD}",
   "apps_domain": "${CF_APPS_DOMAIN}",
