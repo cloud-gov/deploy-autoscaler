@@ -61,8 +61,8 @@ jobs:
 - name: acceptance-tests-development
   plan:
   - in_parallel:
-    - get: autoscaler-manifests
-      passed: [deploy-as-development]
+    - get: autoscaler-manifests-test
+      # passed: [deploy-as-development]
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -210,6 +210,19 @@ resources:
     paths:
     - ci/*
     - bosh/*
+
+
+- name: autoscaler-manifests-test
+  type: git
+  source:
+    uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
+    branch: cw #main
+    paths:
+    - ci/*
+    - bosh/*
+
+
+
 
 - name: terraform-yaml-development
   type: s3-iam
