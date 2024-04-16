@@ -68,6 +68,7 @@ jobs:
     file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
     params:
       GOLANG_VERSION: 1.21 # ((golang_version))
+      ACCEPTANCE_TESTS_VERSION: 12.1.1 #((acceptance_tests_version))
 
 
 
