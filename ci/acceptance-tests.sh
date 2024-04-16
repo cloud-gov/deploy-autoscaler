@@ -16,6 +16,10 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 
 cd acceptance
 
+
+# Set the config file needed for the acceptance tests
+echo "Writing config file for acceptance tests to acceptance/integration_config.json, do not ever print this out into concourse logs!"
+
 cat > integration_config.json <<EOF
 {
   "api": "${CF_API}",
@@ -30,11 +34,12 @@ cat > integration_config.json <<EOF
   "aggregate_interval": 120,
   "health_endpoints_basic_auth_enabled": true,
 
-  "autoscaler_api": "{AUTOSCALER_API}",
+  "autoscaler_api": "${AUTOSCALER_API}",
   "service_offering_enabled": true
 }
 EOF
 export CONFIG=$PWD/integration_config.json
 
+./bin/test broker
 
 echo "~FIN~"
