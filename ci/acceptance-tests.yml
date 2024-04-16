@@ -11,7 +11,7 @@ image_resource:
     tag: ((harden-concourse-task-tag))
 
 inputs:
-- name: autoscaler-manifests
+- name: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
 outputs:
 - name: someoutput
 
