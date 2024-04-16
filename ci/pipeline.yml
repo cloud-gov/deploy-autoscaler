@@ -57,6 +57,21 @@ jobs:
       icon_url: ((slack-icon-url))
 
 
+
+- name: acceptance-tests-development
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      passed: [deploy-as-development]
+  - task: acceptance-tests
+    file: cf-manifests/ci/acceptance-tests.yml
+    params:
+      GOLANG_VERSION: 1.21 # ((golang_version))
+
+
+
+
+
 - name: deploy-as-staging
   serial: true
   plan:
