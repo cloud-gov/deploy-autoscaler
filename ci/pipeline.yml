@@ -1,4 +1,7 @@
 ---
+
+# Deploy Development
+
 jobs:
 - name: deploy-as-development
   serial: true
@@ -58,15 +61,71 @@ jobs:
       icon_url: ((slack-icon-url))
 
 
+## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
+- name: acceptance-tests-broker-development-debug
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests-test                               #Modified resource to do testing
+      trigger: true
+  - task: acceptance-tests
+    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: broker
+
+
+- name: acceptance-tests-api-development-debug
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests-test                               #Modified resource to do testing
+      trigger: true
+      passed: [acceptance-tests-broker-development-debug] 
+  - task: acceptance-tests
+    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: api
+
+
+- name: acceptance-tests-app-development-debug
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests-test                               #Modified resource to do testing
+      trigger: true
+      passed: [acceptance-tests-api-development-debug] 
+  - task: acceptance-tests
+    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: app
+
+
+
+## Acceptance tests for dev
 
 - name: acceptance-tests-broker-development
   plan:
   - in_parallel:
-    - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
+    - get: autoscaler-manifests
       trigger: true
-      # passed: [deploy-as-development] $TODO: turn this back on
+      passed: [deploy-as-development]
   - task: acceptance-tests
-    file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
       ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
@@ -80,11 +139,11 @@ jobs:
 - name: acceptance-tests-api-development
   plan:
   - in_parallel:
-    - get: autoscaler-manifests-test    #TODO: switch this back to autoscaler-manifests
+    - get: autoscaler-manifests
       trigger: true
       passed: [acceptance-tests-broker-development] 
   - task: acceptance-tests
-    file: autoscaler-manifests-test/ci/acceptance-tests.yml  #TODO: switch this back to autoscaler-manifests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
       ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
@@ -95,22 +154,42 @@ jobs:
       COMPONENT_TO_TEST: api
 
 
+- name: acceptance-tests-app-development
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-api-development] 
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+      CF_API: ((cf.development.api))
+      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+      CF_ADMIN_USER: ((cf.development.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      AUTOSCALER_API: ((cf.development.autoscaler_api))
+      COMPONENT_TO_TEST: app
+
+
+
+# Deploy Staging
 
 - name: deploy-as-staging
   serial: true
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [deploy-as-development]
+      passed: [acceptance-tests-api-development]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [deploy-as-development]
+      passed: [acceptance-tests-api-development]
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: cf-stemcell-jammy
-      passed: [deploy-as-development]
+      passed: [acceptance-tests-api-development]
       trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
@@ -156,21 +235,81 @@ jobs:
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
+
+
+## Acceptance tests for Staging
+
+- name: acceptance-tests-broker-staging
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [deploy-as-staging]
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
+      CF_API: ((cf.staging.api))
+      CF_APPS_DOMAIN: ((cf.staging.apps_domain))
+      CF_ADMIN_USER: ((cf.staging.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      AUTOSCALER_API: ((cf.staging.autoscaler_api))
+      COMPONENT_TO_TEST: broker
+
+
+- name: acceptance-tests-api-staging
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-broker-staging] 
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
+      CF_API: ((cf.staging.api))
+      CF_APPS_DOMAIN: ((cf.staging.apps_domain))
+      CF_ADMIN_USER: ((cf.staging.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      AUTOSCALER_API: ((cf.staging.autoscaler_api))
+      COMPONENT_TO_TEST: api
+
+
+- name: acceptance-tests-app-staging
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-api-staging] 
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
+      CF_API: ((cf.staging.api))
+      CF_APPS_DOMAIN: ((cf.staging.apps_domain))
+      CF_ADMIN_USER: ((cf.staging.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      AUTOSCALER_API: ((cf.staging.autoscaler_api))
+      COMPONENT_TO_TEST: app
+
+
+# Deploy Production
+
 - name: deploy-as-production
   serial: true
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [deploy-as-staging]
+      passed: [acceptance-tests-api-staging]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [deploy-as-staging]
+      passed: [acceptance-tests-api-staging]
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
-      passed: [deploy-as-staging]
+      passed: [acceptance-tests-api-staging]
       trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
@@ -218,6 +357,67 @@ jobs:
       icon_url: ((slack-icon-url))
 
 
+
+## Acceptance tests for Production
+
+- name: acceptance-tests-broker-production
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [deploy-as-production]
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
+      CF_API: ((cf.production.api))
+      CF_APPS_DOMAIN: ((cf.production.apps_domain))
+      CF_ADMIN_USER: ((cf.production.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      AUTOSCALER_API: ((cf.production.autoscaler_api))
+      COMPONENT_TO_TEST: broker
+
+
+- name: acceptance-tests-api-production
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-broker-production] 
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
+      CF_API: ((cf.production.api))
+      CF_APPS_DOMAIN: ((cf.production.apps_domain))
+      CF_ADMIN_USER: ((cf.production.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      AUTOSCALER_API: ((cf.production.autoscaler_api))
+      COMPONENT_TO_TEST: api
+
+
+- name: acceptance-tests-app-production
+  plan:
+  - in_parallel:
+    - get: autoscaler-manifests
+      trigger: true
+      passed: [acceptance-tests-api-production] 
+  - task: acceptance-tests
+    file: autoscaler-manifests/ci/acceptance-tests.yml
+    params:
+      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
+      CF_API: ((cf.production.api))
+      CF_APPS_DOMAIN: ((cf.production.apps_domain))
+      CF_ADMIN_USER: ((cf.production.admin_user))
+      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      AUTOSCALER_API: ((cf.production.autoscaler_api))
+      COMPONENT_TO_TEST: app
+
+
+
+
+
+# Resources
 
 resources:
 - name: app-autoscaler-release
