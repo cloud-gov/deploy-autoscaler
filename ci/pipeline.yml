@@ -5,12 +5,12 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-development
+      trigger: true
     - get: cf-stemcell-jammy
       trigger: true
   - task: terraform-secrets
@@ -33,6 +33,7 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+      - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/development.yml
@@ -131,6 +132,7 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-stage.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+      - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-stage.yml
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/staging.yml
@@ -190,6 +192,7 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+      - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-prod.yml
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/production.yml
