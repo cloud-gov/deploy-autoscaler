@@ -180,7 +180,7 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [acceptance-tests-api-development]
+      passed: [deploy-as-development]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
@@ -189,7 +189,7 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: cf-stemcell-jammy
-      passed: [acceptance-tests-api-development]
+      passed: [deploy-as-development]
       trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
@@ -300,7 +300,7 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [acceptance-tests-api-staging]
+      passed: [deploy-as-staging]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
@@ -309,7 +309,7 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
-      passed: [acceptance-tests-api-staging]
+      passed: [deploy-as-staging]
       trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
