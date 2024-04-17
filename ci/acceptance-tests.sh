@@ -14,7 +14,9 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 cd acceptance
 
 # Set the config file needed for the acceptance tests
+echo "###################################"
 echo "Writing config file for acceptance tests to acceptance/integration_config.json, do not ever print this out into concourse logs!"
+echo "###################################"
 
 cat > integration_config.json <<EOF
 {
@@ -41,6 +43,20 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
 
 # Run the actual test, pick one: {broker, api, app}
+echo "###################################"
+echo "Running ${COMPONENT_TO_TEST} test..."
+echo "###################################"
 ./bin/test ${COMPONENT_TO_TEST}
 
+
+
+# Perform the cleanup (drops any created org that is named ASATS*)
+echo "###################################"
+echo "Logging in and running cleanup.sh..."
+echo "###################################"
+cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}"
+./cleanup.sh
+
+echo "###################################"
 echo "~FIN~"
+echo "###################################"
