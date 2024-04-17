@@ -1,10 +1,16 @@
 ---
 
+# Notes:
+# - Do not run the acceptance tests in parallel, there is a cleanup.sh script which will conflict with other runs in parallel, serial_groups are the enforcement of this
+# - As of now, the "app" acceptance tests fail on custom metrics.  Downstream deploys are explicitly not dependent on the app tests to pass for now.
+# - The three "*-debug" jobs can be commented out once autoscaler is in normal operating mode, these exist to shorten the test cycle of debugging the acceptance tests against dev
+
 # Deploy Development
 
 jobs:
 - name: deploy-as-development
   serial: true
+  serial_groups: [development]
   plan:
   - in_parallel:
     - get: app-autoscaler-release
@@ -63,6 +69,7 @@ jobs:
 
 ## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
 - name: acceptance-tests-broker-development-debug
+  serial_groups: [development, debug]
   plan:
   - in_parallel:
     - get: autoscaler-manifests-test                               #Modified resource to do testing
@@ -80,11 +87,11 @@ jobs:
 
 
 - name: acceptance-tests-api-development-debug
+  serial_groups: [development, debug]
   plan:
   - in_parallel:
     - get: autoscaler-manifests-test                               #Modified resource to do testing
       trigger: true
-      passed: [acceptance-tests-broker-development-debug] 
   - task: acceptance-tests
     file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
     params:
@@ -98,11 +105,11 @@ jobs:
 
 
 - name: acceptance-tests-app-development-debug
+  serial_groups: [development, debug]
   plan:
   - in_parallel:
     - get: autoscaler-manifests-test                               #Modified resource to do testing
       trigger: true
-      passed: [acceptance-tests-api-development-debug] 
   - task: acceptance-tests
     file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
     params:
@@ -119,6 +126,7 @@ jobs:
 ## Acceptance tests for dev
 
 - name: acceptance-tests-broker-development
+  serial_groups: [development]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
@@ -134,14 +142,33 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the broker component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 - name: acceptance-tests-api-development
+  serial_groups: [development]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-broker-development] 
+      passed: [deploy-as-development] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -152,14 +179,33 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the api component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the api component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 - name: acceptance-tests-app-development
+  serial_groups: [development]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-api-development] 
+      passed: [deploy-as-development] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -170,13 +216,31 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the app component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the app component of CF App Autoscaler on development
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 # Deploy Staging
 
 - name: deploy-as-staging
   serial: true
+  serial_groups: [staging]
   plan:
   - in_parallel:
     - get: app-autoscaler-release
@@ -184,7 +248,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-development]
+      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ]
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -240,6 +304,7 @@ jobs:
 ## Acceptance tests for Staging
 
 - name: acceptance-tests-broker-staging
+  serial_groups: [staging]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
@@ -255,14 +320,32 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the broker component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-api-staging
+  serial_groups: [staging]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-broker-staging] 
+      passed: [deploy-as-staging] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -273,14 +356,32 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the api component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the api component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-app-staging
+  serial_groups: [staging]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-api-staging] 
+      passed: [deploy-as-staging] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -291,26 +392,44 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the app component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the app component of CF App Autoscaler on staging
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 # Deploy Production
 
 - name: deploy-as-production
+  serial_groups: [production]
   serial: true
   plan:
   - in_parallel:
     - get: app-autoscaler-release
       passed: [deploy-as-staging]
-      trigger: true
+      #trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-staging]
-      trigger: true
+      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
+      #trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
       passed: [deploy-as-staging]
-      trigger: true
+      #trigger: true
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-production
@@ -361,6 +480,7 @@ jobs:
 ## Acceptance tests for Production
 
 - name: acceptance-tests-broker-production
+  serial_groups: [production]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
@@ -376,14 +496,32 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the broker component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-api-production
+  serial_groups: [production]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-broker-production] 
+      passed: [deploy-as-production] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -394,14 +532,32 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the api component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the api component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-app-production
+  serial_groups: [production]
   plan:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [acceptance-tests-api-production] 
+      passed: [deploy-as-production] 
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -412,7 +568,24 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
-
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully tested the app component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform-news"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED testing the app component of CF App Autoscaler on production
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: "#cg-platform"
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 
 
