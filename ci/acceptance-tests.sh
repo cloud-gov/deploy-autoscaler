@@ -1,11 +1,11 @@
 #!/bin/bash
 
 set -eu
-
+echo "###################################"
 echo "This is the installed go version: $(go version)"
 echo "This is the installed cf cli version: $(cf -v)"
 echo "This is the ACCEPTANCE_TESTS_VERSION version: ${ACCEPTANCE_TESTS_VERSION}"
-
+echo "###################################"
 
 # Get the tarball with the test
 wget -O app-autoscaler-acceptance-tests.tgz  https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${ACCEPTANCE_TESTS_VERSION}/app-autoscaler-acceptance-tests-v${ACCEPTANCE_TESTS_VERSION}.tgz
@@ -54,7 +54,7 @@ echo "###################################"
 echo "###################################"
 echo "Logging in and running cleanup.sh..."
 echo "###################################"
-cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}"
+cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}" -o cloud-gov -s services
 ./cleanup.sh
 
 echo "###################################"
