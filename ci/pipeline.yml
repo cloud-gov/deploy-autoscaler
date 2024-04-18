@@ -68,58 +68,58 @@ jobs:
 
 
 ## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
-- name: acceptance-tests-broker-development-debug
-  serial_groups: [development, debug]
-  plan:
-  - in_parallel:
-    - get: autoscaler-manifests-test                               #Modified resource to do testing
-      trigger: true
-  - task: acceptance-tests
-    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-    params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
-      CF_API: ((cf.development.api))
-      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
-      AUTOSCALER_API: ((cf.development.autoscaler_api))
-      COMPONENT_TO_TEST: broker
-
-
-- name: acceptance-tests-api-development-debug
-  serial_groups: [development, debug]
-  plan:
-  - in_parallel:
-    - get: autoscaler-manifests-test                               #Modified resource to do testing
-      trigger: true
-  - task: acceptance-tests
-    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-    params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
-      CF_API: ((cf.development.api))
-      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
-      AUTOSCALER_API: ((cf.development.autoscaler_api))
-      COMPONENT_TO_TEST: api
-
-
-- name: acceptance-tests-app-development-debug
-  serial_groups: [development, debug]
-  plan:
-  - in_parallel:
-    - get: autoscaler-manifests-test                               #Modified resource to do testing
-      trigger: true
-  - task: acceptance-tests
-    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-    params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
-      CF_API: ((cf.development.api))
-      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
-      AUTOSCALER_API: ((cf.development.autoscaler_api))
-      COMPONENT_TO_TEST: app
+#- name: acceptance-tests-broker-development-debug
+#  serial_groups: [development, debug]
+#  plan:
+#  - in_parallel:
+#    - get: autoscaler-manifests-test                               #Modified resource to do testing
+#      trigger: true
+#  - task: acceptance-tests
+#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+#    params:
+#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+#      CF_API: ((cf.development.api))
+#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+#      CF_ADMIN_USER: ((cf.development.admin_user))
+#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      AUTOSCALER_API: ((cf.development.autoscaler_api))
+#      COMPONENT_TO_TEST: broker
+#
+#
+#- name: acceptance-tests-api-development-debug
+#  serial_groups: [development, debug]
+#  plan:
+#  - in_parallel:
+#    - get: autoscaler-manifests-test                               #Modified resource to do testing
+#      trigger: true
+#  - task: acceptance-tests
+#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+#    params:
+#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+#      CF_API: ((cf.development.api))
+#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+#      CF_ADMIN_USER: ((cf.development.admin_user))
+#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      AUTOSCALER_API: ((cf.development.autoscaler_api))
+#      COMPONENT_TO_TEST: api
+#
+#
+#- name: acceptance-tests-app-development-debug
+#  serial_groups: [development, debug]
+#  plan:
+#  - in_parallel:
+#    - get: autoscaler-manifests-test                               #Modified resource to do testing
+#      trigger: true
+#  - task: acceptance-tests
+#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
+#    params:
+#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
+#      CF_API: ((cf.development.api))
+#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
+#      CF_ADMIN_USER: ((cf.development.admin_user))
+#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      AUTOSCALER_API: ((cf.development.autoscaler_api))
+#      COMPONENT_TO_TEST: app
 
 
 
@@ -605,7 +605,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: cw #main
+    branch: main
     paths:
     - ci/*
     - bosh/*
@@ -615,7 +615,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: cw #main
+    branch: main
     paths:
     - ci/*
     - bosh/*
