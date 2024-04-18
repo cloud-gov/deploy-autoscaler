@@ -1,0 +1,7 @@
+- path: /releases/name=app-autoscaler?
+  type: replace
+  value:
+    name: app-autoscaler
+    version: 12.2.1
+    url: https://storage.googleapis.com/app-autoscaler-releases/releases/app-autoscaler-v12.2.1.tgz
+    sha1: sha256:39a072d429a17efd27f3b819eff29efa043dc3ffe3f0676fd7be192477ac4c71
