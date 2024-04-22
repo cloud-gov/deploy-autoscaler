@@ -640,7 +640,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: cw3 #main
     paths:
     - ci/*
     - bosh/*
