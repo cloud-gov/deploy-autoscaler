@@ -22,6 +22,7 @@ jobs:
       trigger: true
     - get: cf-stemcell-jammy
       trigger: true
+    - get: pipeline-tasks
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-development
@@ -47,6 +48,17 @@ jobs:
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/development.yml
       - terraform-secrets/terraform.yml
+  - task: enable-service-access
+    file: pipeline-tasks/set-plan-visibility.yml
+    params:
+      CF_API_URL: ((cf.development.api))
+      CF_USERNAME: ((cf.development.admin_user))
+      CF_PASSWORD: ((cf.development.admin_password))
+      CF_ORGANIZATION: ((broker-organization))
+      CF_SPACE: ((broker-space))
+      BROKER_NAME: ((broker-name))
+      SERVICES: ((cf.development.services))
+      SERVICE_ORGANIZATION: ((cf.development.service_organization))
   on_success:
     put: slack
     params:
@@ -68,6 +80,7 @@ jobs:
 
 
 ## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
+
 #- name: acceptance-tests-broker-development-debug
 #  serial_groups: [development, debug]
 #  plan:
@@ -596,7 +609,6 @@ resources:
 - name: app-autoscaler-release
   type: git
   source:
-    commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: https://github.com/cloudfoundry/app-autoscaler-release
     branch: main
     tag_filter: "v*"
@@ -611,16 +623,22 @@ resources:
     - bosh/*
 
 
-- name: autoscaler-manifests-test
+#- name: autoscaler-manifests-test
+#  type: git
+#  source:
+#    uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
+#    branch: main
+#    paths:
+#    - ci/*
+#    - bosh/*
+
+- name: pipeline-tasks
   type: git
+  icon: github-circle
   source:
-    uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
+    uri: ((pipeline-tasks-git-url))
     branch: main
-    paths:
-    - ci/*
-    - bosh/*
-
-
+    commit_verification_keys: ((cloud-gov-pgp-keys))
 
 
 - name: terraform-yaml-development
