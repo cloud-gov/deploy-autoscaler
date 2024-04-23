@@ -445,16 +445,16 @@ jobs:
   - in_parallel:
     - get: app-autoscaler-release
       passed: [deploy-as-staging]
-      #trigger: true
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
-      #trigger: true
+      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
       passed: [deploy-as-staging]
-      #trigger: true
+      trigger: true
     - get: pipeline-tasks
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml

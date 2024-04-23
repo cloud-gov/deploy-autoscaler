@@ -7,8 +7,10 @@ This is done in a few steps:
  3. Create ops files for rds and loggregator certs
  4. Deploy
  5. Register broker
- 6. Test
- 7. Install plugin
+ 6. Enable the broker for an organization
+ 7. Acceptance Tests
+ 8. Manual Tests
+ 9. Install plugin
 
 
 Overall instructions for install are at https://github.com/cloudfoundry/app-autoscaler-release/blob/main/README.md .  While the overall process is correct, many of the details, such as user names and base yaml files to use are incorrect.  These are corrected for in this set of instructions.  With that out of the way, let's deploy!
@@ -112,8 +114,7 @@ g2REDACTEDy4
 
 ## 3. Create the ops files for deploying app-autoscaler
 
-These have been created and reside in
-
+These have been created and reside in `bosh/opsfiles`, they are mostly based on upstream versions of the ops files.  The vast majority of the customizations are from autoscaler assuming that the name of the Cloud Foundry is named `cf`, which it is not.
 
 The only remaining task is to upload the release, for some reason there is no built in release structure which includes the release version itself.
 
@@ -124,12 +125,16 @@ cd app-autoscaler-release
 bosh upload-release --sha1 828ddb8484c42c4c4e0eeee401bc684857aacf57 https://bosh.io/d/github.com/cloudfoundry-incubator/app-autoscaler-release?v=11.1.1
 ```
 
+An ops file named `bosh/opsfiles/releases.yml` now holds the configuration above and is used by the pipeline.
+
 ## 4. Deploy
 
 Navigate to [https://ci.fr.cloud.gov/teams/main/pipelines/deploy-autoscaler](https://ci.fr.cloud.gov/teams/main/pipelines/deploy-autoscaler) to deploy via pipeline.
 
 
 ##  5. Register broker
+
+Note: The broker has already been registered in development, staging and production using the instructions below, this activity should not need to be repeated.
 
 Original instructions, which won't work:
 
@@ -175,9 +180,28 @@ Creating service broker autoscaler as platform.operator...
 OK
 ```
 
-##  6. Test
+##  6. Enable the broker for an organization
 
-Now enable the service broker for the `cloud-gov-operators` org:
+There are two ways of enabling service access: via the pipeline and manually
+
+
+### Enable via the pipeline (Preferred)
+
+The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml](https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml) to set the list of orgs to enable the broker access.  To add additional organizations, modify the `cg-deploy-autoscaler.yml` secrets file, the list of orgs are space delimited: 
+
+```
+cf:
+  development:
+    service_organization: org1 org2 org3
+  staging:
+    service_organization: org1 org2
+  production:
+    service_organization: org3 org4 org5
+```
+
+### Manual enabling (Debugging)
+
+To enable the service broker for the `cloud-gov-operators` org:
 
 ```
 cf enable-service-access app-autoscaler -o cloud-gov-operators
@@ -185,6 +209,22 @@ cf enable-service-access app-autoscaler -o cloud-gov-operators
 Enabling access to all plans of service offering app-autoscaler for org cloud-gov-operators as platform.operator...
 OK
 ```
+
+##  7. Acceptance Tests
+
+The app-autoscaler-release as part of their releases includes a tarball with a precompiled test app for each release version, see this link for the [12.1.1 example](https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v12.1.1/app-autoscaler-acceptance-tests-v12.1.1.tgz).  To use this tarball, you'll need to configure a `integration_config.json` with information, such as a cf user, cf api, broker credentials and other bits of information.  Once this is done, there are tests that you can run as `./bin/test test-type`.
+
+These contain three types of tests:
+
+ - broker - ~5 minutes to run
+ - api - ~5 minutes to run
+ - app - currently paused since custom metrics are not working and the test takes ~1 hour to run
+
+In the pipeline for `cg-deploy-autoscaler`, each of these tests are configured to run after the deployment of development, staging and production as `acceptance-tests-{api,broker,app}-{development,staging,production}`.  These tests are configured to not run in parallel as each runs a `cleanup.sh` script at the end which deletes orgs with the naming convention `ASATS-*`.
+
+
+##  8. Manual Tests
+
 
 Create a service instance:
 
@@ -343,7 +383,7 @@ memory usage:   256M
 Yay!
 
 
-## 7. Install plugin
+## 9. Install plugin
 
 To gain more insight and view the audit trail of the app scaling up and down there is a CF plugin which can be installed:
 
