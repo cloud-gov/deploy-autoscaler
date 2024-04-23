@@ -222,6 +222,8 @@ These contain three types of tests:
 
 In the pipeline for `cg-deploy-autoscaler`, each of these tests are configured to run after the deployment of development, staging and production as `acceptance-tests-{api,broker,app}-{development,staging,production}`.  These tests are configured to not run in parallel as each runs a `cleanup.sh` script at the end which deletes orgs with the naming convention `ASATS-*`.
 
+There is also a set of 3 acceptance tests for development debugging which are commented out, along with a custom resouce towards the bottom.  These exist to debug the bash and other scripting without having to wait for a deployment to development to finish first.  Please comment these back out before submitting PRs.
+
 
 ##  8. Manual Tests
 
