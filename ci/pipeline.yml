@@ -268,6 +268,7 @@ jobs:
     - get: cf-stemcell-jammy
       passed: [deploy-as-development]
       trigger: true
+    - get: pipeline-tasks
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-staging
@@ -293,6 +294,17 @@ jobs:
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/staging.yml
       - terraform-secrets/terraform.yml
+  - task: enable-service-access
+    file: pipeline-tasks/set-plan-visibility.yml
+    params:
+      CF_API_URL: ((cf.staging.api))
+      CF_USERNAME: ((cf.staging.admin_user))
+      CF_PASSWORD: ((cf.staging.admin_password))
+      CF_ORGANIZATION: ((broker-organization))
+      CF_SPACE: ((broker-space))
+      BROKER_NAME: ((broker-name))
+      SERVICES: ((cf.staging.services))
+      SERVICE_ORGANIZATION: ((cf.staging.service_organization))
   on_success:
     put: slack
     params:
@@ -433,16 +445,17 @@ jobs:
   - in_parallel:
     - get: app-autoscaler-release
       passed: [deploy-as-staging]
-      #trigger: true
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
-      #trigger: true
+      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
       passed: [deploy-as-staging]
-      #trigger: true
+      trigger: true
+    - get: pipeline-tasks
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-production
@@ -468,7 +481,17 @@ jobs:
       vars_files:
       - autoscaler-manifests/bosh/varsfiles/production.yml
       - terraform-secrets/terraform.yml
-
+  - task: enable-service-access
+    file: pipeline-tasks/set-plan-visibility.yml
+    params:
+      CF_API_URL: ((cf.production.api))
+      CF_USERNAME: ((cf.production.admin_user))
+      CF_PASSWORD: ((cf.production.admin_password))
+      CF_ORGANIZATION: ((broker-organization))
+      CF_SPACE: ((broker-space))
+      BROKER_NAME: ((broker-name))
+      SERVICES: ((cf.production.services))
+      SERVICE_ORGANIZATION: ((cf.production.service_organization))
   on_success:
     put: slack
     params:
@@ -634,7 +657,6 @@ resources:
 
 - name: pipeline-tasks
   type: git
-  icon: github-circle
   source:
     uri: ((pipeline-tasks-git-url))
     branch: main
