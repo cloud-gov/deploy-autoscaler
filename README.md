@@ -228,7 +228,9 @@ There is also a set of 3 acceptance tests for development debugging which are co
 ##  8. Manual Tests
 
 
-Create a service instance:
+### CPU Example 
+
+This first test will show how to create an Autoscaler Policy based on CPU, start by creating a service instance:
 
 ```
 cf create-service app-autoscaler  autoscaler-free-plan  my-autoscaler
@@ -307,7 +309,7 @@ memory usage:   256M
 
 Since there is no load on this hello-world style app, you'll then see the number of application instances from 4, to 3, to 2, to 1 over the course of 8 or so minutes.
 
-### To test the scale up, we'll need to add load and drop the threshold
+#### To test the scale up, we'll need to add load and drop the threshold
 
 Start by creating a new policy with an 11% scale up threshold:
 
@@ -384,6 +386,72 @@ memory usage:   256M
 
 Yay!
 
+### Scheduled Example
+
+The policy below has been manipulated to be artificially low to result in the application scaling to 4 app instances during a 30 minute window:
+
+```
+cat << POLICY > my_policy.json
+{
+  "instance_min_count": 1,
+  "instance_max_count": 4,
+  "scaling_rules":
+  [
+   {
+    "metric_type": "memoryused",
+    "breach_duration_secs": 60,
+    "threshold": 0,
+    "operator": ">",
+    "cool_down_secs": 60,
+    "adjustment": "+1"
+   }   
+  ],
+  "schedules": {
+    "timezone": "America/New_York",
+    "specific_date": [
+      {
+        "start_date_time": "2024-04-23T16:30",
+        "end_date_time": "2024-04-23T17:00",
+        "instance_min_count": 1,
+        "instance_max_count": 4,
+        "initial_min_instance_count": 2
+      }
+    ]
+  }
+}
+POLICY
+```
+
+A list of timezones used are defined at [https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html)
+
+Unbind then bind the service instance to the app to have the policy applied, then verify the policy is in effect:
+
+```
+cf unbind-service my_cf3_app my-autoscaler
+cf bind-service my_cf3_app my-autoscaler -c my_policy.json
+cf asp my_cf3_app
+```
+
+Checked back after 5pm, the following scaling events had occurred:
+
+```
+cf ash my_cf3_app
+
+Retrieving scaling event history for app my_cf3_app...
+Scaling Type            Status          Instance Changes        Time                            Action                                                          Error     
+dynamic                 succeeded       3->4                    2024-04-23T16:32:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds               
+dynamic                 succeeded       2->3                    2024-04-23T16:30:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds               
+dynamic                 succeeded       1->2                    2024-04-23T16:26:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds                
+```
+
+Starting from the bottom, you can see when the policy was applied at 4:26PM it immediately bumped the instances to 2 because of the `"initial_min_instance_count": 2`, then starting at 4:30PM it started to add 1 app instance at a time until the max of 4 was reached.
+
+Nifty!
+
+
+### Looking for more examples?
+
+All of the possible policy configurations can be found at [https://github.com/cloudfoundry/app-autoscaler-release/blob/main/docs/policy.md](https://github.com/cloudfoundry/app-autoscaler-release/blob/main/docs/policy.md) (note that custom metrics do not currently work).
 
 ## 9. Install plugin
 

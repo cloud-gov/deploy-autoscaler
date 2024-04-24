@@ -63,3 +63,25 @@
       instance_group: log-cache
       network: default
       query: '*'
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: app-autoscaler.metricsforwarder.service.cf.internal
+    targets:
+    - deployment: app-autoscaler
+      domain: bosh
+      instance_group: metricsforwarder
+      network: default
+      query: '*'
+      
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: app-autoscaler.operator.service.cf.internal
+    targets:
+    - deployment: app-autoscaler
+      domain: bosh
+      instance_group: operator
+      network: default
+      query: '*'
