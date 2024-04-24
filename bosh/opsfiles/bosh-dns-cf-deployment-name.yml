@@ -89,7 +89,7 @@
 
 - type: remove
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=((deployment_name)).autoscalerpostgres.service.cf.internal
-  
+
 - type: remove
   path: /domains/metricsgateway
 
@@ -98,3 +98,12 @@
 
 - type: remove
   path: /domains/postgres
+
+
+- type: replace
+  path: /domains/metricsforwarder?
+  value: app-autoscaler.metricsforwarder.service.cf.internal
+
+- type: replace
+  path: /domains/operator?
+  value: app-autoscaler.operator.service.cf.internal
