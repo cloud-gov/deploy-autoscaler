@@ -74,7 +74,7 @@
       instance_group: metricsforwarder
       network: default
       query: '*'
-      
+
 - type: replace
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
   value:
@@ -85,3 +85,15 @@
       instance_group: operator
       network: default
       query: '*'
+
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=app-autoscaler.autoscalerpostgres.service.cf.internal
+
+- type: remove
+  path: /domains/metricsgateway
+
+- type: remove
+  path: /domains/metricsserver
+
+- type: remove
+  path: /domains/postgres
