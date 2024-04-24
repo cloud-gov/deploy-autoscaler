@@ -86,9 +86,10 @@
       network: default
       query: '*'
 
-- type: remove
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=app-autoscaler.autoscalerpostgres.service.cf.internal
 
+- type: remove
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=((deployment_name)).autoscalerpostgres.service.cf.internal
+  
 - type: remove
   path: /domains/metricsgateway
 
