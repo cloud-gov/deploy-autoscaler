@@ -38,3 +38,37 @@
   path: /variables/name=metricsforwarder_autoscaler_metricsforwarder_loggregator_tls/options/duration?
 - type: remove
   path: /variables/name=servicebroker_server_cert/options/duration?
+
+
+# Add certs for operator and metricsforwarder for route_registrar
+- type: replace
+  path: /variables/-
+  value:
+    name: operator_server_cert
+    options:
+      alternative_names:
+      - app-autoscaler.operator.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.operator.service.cf.internal
+      extended_key_usage:
+      - client_auth
+      - server_auth
+      key_length: 4096
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: metricsforwarder_server_cert
+    options:
+      alternative_names:
+      - app-autoscaler.metricsforwarder.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.metricsforwarder.service.cf.internal
+      extended_key_usage:
+      - client_auth
+      - server_auth
+      key_length: 4096
+    type: certificate
+    update_mode: converge
