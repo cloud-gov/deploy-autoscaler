@@ -49,27 +49,27 @@
 
 
 #apiserver (broker 6102)
-- type: replace
-  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/ca_cert?
-  value: ((app_autoscaler_ca_cert.ca))  
-- type: replace
-  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_cert?
-  value: ((apiserver_server_rr_cert.certificate))
-- type: replace
-  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_key?
-  value: ((apiserver_server_rr_cert.private_key))
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/ca_cert?
+#  value: ((app_autoscaler_ca_cert.ca))  
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_cert?
+#  value: ((apiserver_server_rr_cert.certificate))
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_key?
+#  value: ((apiserver_server_rr_cert.private_key))
 
-- type: remove
-  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/port
-- type: replace
-  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/tls_port?
-  value: 6102
+#- type: remove
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/port
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/tls_port?
+#  value: 6102
 - type: replace
   path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/timeout?
   value: 10s
-- type: replace
-  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/server_cert_domain_san?
-  value: app-autoscaler.apiserver.service.cf.internal
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/server_cert_domain_san?
+#  value: app-autoscaler.apiserver.service.cf.internal
 
 
 
