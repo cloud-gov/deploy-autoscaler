@@ -50,7 +50,7 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 echo "###################################"
 echo "Running ${COMPONENT_TO_TEST} test..."
 echo "###################################"
-./bin/test ${COMPONENT_TO_TEST}
+./bin/test ${COMPONENT_TO_TEST} --nodes=4 #--flake-attempts=3
 
 
 
