@@ -34,6 +34,10 @@ cat > integration_config.json <<EOF
 
   "autoscaler_api": "${AUTOSCALER_API}",
   "service_offering_enabled": true
+
+  "cpuutil_scaling_policy_test": {
+    "app_cpu_entitlement": ${APP_CPU_ENTITLEMENT}
+  }
 }
 EOF
 export CONFIG=$PWD/integration_config.json

@@ -43,6 +43,8 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
+#      - app-autoscaler-release/operations/cpu_upper_threshold_400.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml
       vars_files:
@@ -97,6 +99,7 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: broker
+#      APP_CPU_ENTITLEMENT: 50
 #
 #
 #- name: acceptance-tests-api-development-debug
@@ -115,6 +118,7 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: api
+#      APP_CPU_ENTITLEMENT: 50
 #
 #
 #- name: acceptance-tests-app-development-debug
@@ -133,7 +137,7 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: app
-
+#      APP_CPU_ENTITLEMENT: 50
 
 
 ## Acceptance tests for dev
@@ -155,6 +159,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -192,6 +197,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -229,6 +235,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -261,7 +268,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ]
+      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] #[deploy-as-development] #
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -289,6 +296,7 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-stage.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-stage.yml
       vars_files:
@@ -345,6 +353,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -381,6 +390,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -417,6 +427,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -448,7 +459,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
+      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] #[deploy-as-staging] #
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
@@ -476,6 +487,7 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
+#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-prod.yml
       vars_files:
@@ -532,6 +544,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -568,6 +581,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -604,6 +618,7 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
+      APP_CPU_ENTITLEMENT: 50
   on_success:
     put: slack
     params:
@@ -640,7 +655,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: cw4 #main
     paths:
     - ci/*
     - bosh/*
