@@ -33,7 +33,7 @@ cat > integration_config.json <<EOF
   "health_endpoints_basic_auth_enabled": true,
 
   "autoscaler_api": "${AUTOSCALER_API}",
-  "service_offering_enabled": true
+  "service_offering_enabled": true,
 
   "cpuutil_scaling_policy_test": {
     "app_cpu_entitlement": ${APP_CPU_ENTITLEMENT}
