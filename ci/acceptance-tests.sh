@@ -17,10 +17,10 @@ cd acceptance
 echo "###################################"
 echo "Logging in and create a test org/space, IMPORTANT: bind the public_networks_egress ASG"
 echo "###################################"
-cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}" -o cloud-gov -s services
-cf create-org ${AUTOSCALER_CF_ORG}
-cf create-space ${AUTOSCALER_CF_SPACE} -o ${AUTOSCALER_CF_ORG}
-cf bind-security-group public_networks_egress ${AUTOSCALER_CF_ORG} --space ${AUTOSCALER_CF_SPACE}
+#cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}" -o cloud-gov -s services
+#cf create-org ${AUTOSCALER_CF_ORG}
+#cf create-space ${AUTOSCALER_CF_SPACE} -o ${AUTOSCALER_CF_ORG}
+#cf bind-security-group public_networks_egress ${AUTOSCALER_CF_ORG} --space ${AUTOSCALER_CF_SPACE}
 
 
 # Set the config file needed for the acceptance tests
@@ -49,6 +49,8 @@ cat > integration_config.json <<EOF
   "existing_organization": "${AUTOSCALER_CF_ORG}",
   "use_existing_space": true,
   "existing_space": "${AUTOSCALER_CF_SPACE}",
+  "use_existing_user": true,
+  "existing_user": "${CF_ADMIN_USER}",
 
   "cpuutil_scaling_policy_test": {
     "app_cpu_entitlement": ${APP_CPU_ENTITLEMENT}
