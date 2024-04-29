@@ -100,6 +100,8 @@ jobs:
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: broker
 #      APP_CPU_ENTITLEMENT: 50
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
 #
 #- name: acceptance-tests-api-development-debug
@@ -119,6 +121,8 @@ jobs:
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: api
 #      APP_CPU_ENTITLEMENT: 50
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
 #
 #- name: acceptance-tests-app-development-debug
@@ -138,7 +142,8 @@ jobs:
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: app
 #      APP_CPU_ENTITLEMENT: 50
-
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 
 ## Acceptance tests for dev
 
@@ -160,6 +165,8 @@ jobs:
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -198,6 +205,8 @@ jobs:
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -236,6 +245,8 @@ jobs:
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -354,6 +365,8 @@ jobs:
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -391,6 +404,8 @@ jobs:
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -428,6 +443,8 @@ jobs:
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -545,6 +562,8 @@ jobs:
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:
@@ -582,6 +601,8 @@ jobs:
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:
@@ -619,6 +640,8 @@ jobs:
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
       APP_CPU_ENTITLEMENT: 50
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:

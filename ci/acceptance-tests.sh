@@ -13,6 +13,16 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 
 cd acceptance
 
+
+echo "###################################"
+echo "Logging in and create a test org/space, IMPORTANT: bind the public_networks_egress ASG"
+echo "###################################"
+cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}" -o cloud-gov -s services
+cf create-org ${AUTOSCALER_CF_ORG}
+cf create-space ${AUTOSCALER_CF_SPACE} -o ${AUTOSCALER_CF_ORG}
+cf bind-security-group public_networks_egress ${AUTOSCALER_CF_ORG} --space ${AUTOSCALER_CF_SPACE}
+
+
 # Set the config file needed for the acceptance tests
 echo "###################################"
 echo "Writing config file for acceptance tests to acceptance/integration_config.json, do not ever print this out into concourse logs!"
@@ -34,6 +44,11 @@ cat > integration_config.json <<EOF
 
   "autoscaler_api": "${AUTOSCALER_API}",
   "service_offering_enabled": true,
+
+  "use_existing_organization": true,
+  "existing_organization": "${AUTOSCALER_CF_ORG}",
+  "use_existing_space": true,
+  "existing_space": "${AUTOSCALER_CF_SPACE}",
 
   "cpuutil_scaling_policy_test": {
     "app_cpu_entitlement": ${APP_CPU_ENTITLEMENT}
