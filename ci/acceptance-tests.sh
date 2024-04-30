@@ -49,8 +49,6 @@ cat > integration_config.json <<EOF
   "existing_organization": "${AUTOSCALER_CF_ORG}",
   "use_existing_space": true,
   "existing_space": "${AUTOSCALER_CF_SPACE}",
-  "use_existing_user": true,
-  "existing_user": "${CF_ADMIN_USER}",
 
   "cpuutil_scaling_policy_test": {
     "app_cpu_entitlement": ${APP_CPU_ENTITLEMENT}
