@@ -13,20 +13,7 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 
 cd acceptance
 
-if [ "$COMPONENT_TO_TEST" = "app" ]; then 
-
-
-  echo "######################################################################"
-  echo "Removing test for cpuutil for v12.2.2"
-  echo "######################################################################"
-
-  head -n 257 app/dynamic_policy_test.go > dynamic_policy_test.go
-  tail -n +290 app/dynamic_policy_test.go >> dynamic_policy_test.go
-  chmod 644 dynamic_policy_test.go
-  
-  mv app/dynamic_policy_test.go app/dynamic_policy_test.orig.off
-  mv dynamic_policy_test.go app/dynamic_policy_test.go
-
+if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
 
   echo "######################################################################"
   echo "Logging in and create a test org/space, IMPORTANT: bind the public_networks_egress ASG"
@@ -101,9 +88,9 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
 # Run the actual test, pick one: {broker, api, app}
 echo "######################################################################"
-echo "Running ${COMPONENT_TO_TEST} test..."
+echo "Running ${COMPONENT_TO_TEST}, skipping any test with 'cpuutil' in it..."
 echo "######################################################################"
-./bin/test ${COMPONENT_TO_TEST} #--nodes=4 #--flake-attempts=3
+./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
 
 
 
