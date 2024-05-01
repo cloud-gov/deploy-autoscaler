@@ -13,7 +13,7 @@ tar -xzf app-autoscaler-acceptance-tests.tgz
 
 cd acceptance
 
-if [ "$COMPONENT_TO_TEST" = "app"]; then 
+if [ "$COMPONENT_TO_TEST" = "app" ]; then 
 
 
   echo "######################################################################"
