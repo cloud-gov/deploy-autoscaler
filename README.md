@@ -504,3 +504,4 @@ In no particular order:
  - Will also need to circle back to the RDS instances, will likely want to add REINDEX jobs to some of the tables which store metrics, scaling history and other tables which have a high frequency of deletes.
  - The defaults for data retentions for metrics history, scaling history and others are kept at the defaults defined in the spec, an example of this can be seen [here](https://github.com/cloudfoundry/app-autoscaler-release/blob/main/jobs/operator/spec#L215-L217).
  - Policies with recurring or date schedules still require scaling rules with a metric type defined.  If you want to force an app to scale at a particular make sure that the scaling rules are easy to achieve (ie: cpu > 0)
+ - The dynamic_policy_test.go tests for disk will fail with the default 128MB of memory in Staging and Production (oddly works fine in development), this was bumped in the configuration file to 1024 MB for the `app` tests
