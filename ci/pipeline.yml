@@ -43,8 +43,6 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
-#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
-#      - app-autoscaler-release/operations/cpu_upper_threshold_400.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-dev.yml
       vars_files:
@@ -279,7 +277,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] #[deploy-as-development] #
+      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] 
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -307,7 +305,6 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-stage.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
-#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-stage.yml
       vars_files:
@@ -476,7 +473,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] #[deploy-as-staging] #
+      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] 
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
@@ -504,7 +501,6 @@ jobs:
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
-#      - autoscaler-manifests/bosh/opsfiles/route-registrar-tls.yml
       - autoscaler-manifests/bosh/opsfiles/releases.yml
       - autoscaler-manifests/bosh/opsfiles/scaling-prod.yml
       vars_files:
