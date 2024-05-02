@@ -49,7 +49,9 @@ if [[ "$COMPONENT_TO_TEST" = "app" ]]; then
   "use_existing_organization": true,
   "existing_organization": "${AUTOSCALER_CF_ORG}",
   "use_existing_space": true,
-  "existing_space": "${AUTOSCALER_CF_SPACE}"
+  "existing_space": "${AUTOSCALER_CF_SPACE}",
+  
+  "node_memory_limit": 1024
 }
 EOF
 else
