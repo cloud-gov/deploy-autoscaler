@@ -97,7 +97,6 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: broker
-#      APP_CPU_ENTITLEMENT: 50
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
 #      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
@@ -118,7 +117,6 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: api
-#      APP_CPU_ENTITLEMENT: 50
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
 #      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
@@ -139,7 +137,6 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: app
-#      APP_CPU_ENTITLEMENT: 50
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
 #      AUTOSCALER_CF_SPACE: ((cf.development.space))
 
@@ -162,7 +159,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
@@ -202,7 +198,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
@@ -242,7 +237,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
@@ -361,7 +355,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
@@ -400,7 +393,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
@@ -439,7 +431,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
@@ -557,7 +548,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
@@ -596,7 +586,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
@@ -635,7 +624,6 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
-      APP_CPU_ENTITLEMENT: 50
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
