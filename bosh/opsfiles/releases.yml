@@ -1,11 +1,3 @@
-#- path: /releases/name=app-autoscaler?
-#  type: replace
-#  value:
-#    name: app-autoscaler
-#    version: "12.2.2"
-#    url: "https://bosh.io/d/github.com/cloudfoundry-incubator/app-autoscaler-release?v=12.2.2"
-#    sha1: "a1fffce71219318d1fb27ec5fc3ff84e757337ed"
-
 # Not used
 - type: remove
   path: /releases/name=postgres
