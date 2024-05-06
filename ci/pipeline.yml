@@ -273,6 +273,9 @@ jobs:
     - get: app-autoscaler-release
       passed: [deploy-as-development]
       trigger: true
+    - get: release
+      passed: [deploy-as-development]
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] 
@@ -288,6 +291,8 @@ jobs:
   - put: autoscaler-deployment-staging
     params: 
       manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      releases:
+      - release/app-autoscaler-v*.tgz
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:
@@ -466,6 +471,9 @@ jobs:
     - get: app-autoscaler-release
       passed: [deploy-as-staging]
       trigger: true
+    - get: release
+      passed: [deploy-as-staging]
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] 
@@ -481,6 +489,8 @@ jobs:
   - put: autoscaler-deployment-production
     params: 
       manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      releases:
+      - release/app-autoscaler-v*.tgz
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:
@@ -655,23 +665,23 @@ jobs:
 # Resources
 
 resources:
-- name: app-autoscaler-release
+- name: app-autoscaler-release   #Used as input for folder structure for upstream ops files
   type: git
   source:
     uri: https://github.com/cloudfoundry/app-autoscaler-release
     branch: main
     tag_filter: "v*"
 
-- name: autoscaler-manifests
+- name: autoscaler-manifests     #Used as input for folder structure for custom ops files
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: cw5 #main
+    branch: main
     paths:
     - ci/*
     - bosh/*
 
-- name: release
+- name: release                  #Used to detect when new bosh releases are cut
   type: github-release
   source:
     owner: cloudfoundry
