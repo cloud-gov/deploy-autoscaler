@@ -97,6 +97,8 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: broker
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
 #
 #- name: acceptance-tests-api-development-debug
@@ -115,6 +117,8 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: api
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 #
 #
 #- name: acceptance-tests-app-development-debug
@@ -133,8 +137,8 @@ jobs:
 #      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: app
-
-
+#      AUTOSCALER_CF_ORG: ((cf.development.org))
+#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 
 ## Acceptance tests for dev
 
@@ -155,6 +159,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -192,6 +198,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -229,6 +237,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.development.admin_password))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
+      AUTOSCALER_CF_ORG: ((cf.development.org))
+      AUTOSCALER_CF_SPACE: ((cf.development.space))
   on_success:
     put: slack
     params:
@@ -261,7 +271,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ]
+      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] 
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -345,6 +355,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -381,6 +393,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -417,6 +431,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
+      AUTOSCALER_CF_ORG: ((cf.staging.org))
+      AUTOSCALER_CF_SPACE: ((cf.staging.space))
   on_success:
     put: slack
     params:
@@ -448,7 +464,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
+      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] 
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
@@ -532,6 +548,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:
@@ -568,6 +586,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:
@@ -604,6 +624,8 @@ jobs:
       CF_ADMIN_PASSWORD: ((cf.production.admin_password))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
+      AUTOSCALER_CF_ORG: ((cf.production.org))
+      AUTOSCALER_CF_SPACE: ((cf.production.space))
   on_success:
     put: slack
     params:

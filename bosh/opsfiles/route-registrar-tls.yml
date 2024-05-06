@@ -1,0 +1,210 @@
+
+#scalingengine (health 6204)
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=scalingengine/properties/autoscaler/scalingengine/health/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=scalingengine/properties/autoscaler/scalingengine/health/server_cert?
+  value: ((scalingengine_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=scalingengine/properties/autoscaler/scalingengine/health/server_key?
+  value: ((scalingengine_server_rr_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scalingengine_health/port
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scalingengine_health/tls_port?
+  value: 6204
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scalingengine_health/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=scalingengine/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scalingengine_health/server_cert_domain_san?
+  value: app-autoscaler.scalingengine.service.cf.internal
+
+
+
+#apiserver (api 6101)
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/public_api/server/ca_cert?
+#  value: ((app_autoscaler_ca_cert.ca))
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/public_api/server/server_cert?
+#  value: ((apiserver_server_rr_cert.certificate))
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/public_api/server/server_key?
+#  value: ((apiserver_server_rr_cert.private_key))
+
+#- type: remove
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=api_server/port
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=api_server/tls_port?
+#  value: 6101
+- type: replace
+  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=api_server/timeout?
+  value: 10s
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=api_server/server_cert_domain_san?
+#  value: app-autoscaler.apiserver.service.cf.internal
+
+
+#apiserver (broker 6102)
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/ca_cert?
+#  value: ((app_autoscaler_ca_cert.ca))  
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_cert?
+#  value: ((apiserver_server_rr_cert.certificate))
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=golangapiserver/properties/autoscaler/apiserver/broker/server/server_key?
+#  value: ((apiserver_server_rr_cert.private_key))
+
+#- type: remove
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/port
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/tls_port?
+#  value: 6102
+- type: replace
+  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/timeout?
+  value: 10s
+#- type: replace
+#  path: /instance_groups/name=apiserver/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_service_broker/server_cert_domain_san?
+#  value: app-autoscaler.apiserver.service.cf.internal
+
+
+
+#scheduler (health 6202)
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=scheduler/properties/autoscaler/scheduler/health/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))  
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=scheduler/properties/autoscaler/scheduler/health/server_cert?
+  value: ((scheduler_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=scheduler/properties/autoscaler/scheduler/health/server_key?
+  value: ((scheduler_server_rr_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scheduler_health/port
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scheduler_health/tls_port?
+  value: 6202
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scheduler_health/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_scheduler_health/server_cert_domain_san?
+  value: app-autoscaler.autoscalerscheduler.service.cf.internal
+
+
+#operator (health 6208)
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=operator/properties/autoscaler/operator/health/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))  
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=operator/properties/autoscaler/operator/health/server_cert?
+  value: ((operator_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=operator/properties/autoscaler/operator/health/server_key?
+  value: ((operator_server_rr_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=operator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_operator_health/port
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_operator_health/tls_port?
+  value: 6208
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_operator_health/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=operator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_operator_health/server_cert_domain_san?
+  value: app-autoscaler.operator.service.cf.internal
+
+
+#eventgenerator (health 6205)
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=eventgenerator/properties/autoscaler/eventgenerator/health/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))  
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=eventgenerator/properties/autoscaler/eventgenerator/health/server_cert?
+  value: ((eventgenerator_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=eventgenerator/properties/autoscaler/eventgenerator/health/server_key?
+  value: ((eventgenerator_server_rr_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_eventgenerator_health/port
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_eventgenerator_health/tls_port?
+  value: 6205
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_eventgenerator_health/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_eventgenerator_health/server_cert_domain_san?
+  value: app-autoscaler.eventgenerator.service.cf.internal
+
+
+
+
+# metricsforwarder (metrics & mtls 6201)
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/server/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))  
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/server/server_cert?
+  value: ((metricsforwarder_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/server/server_key?
+  value: ((metricsforwarder_server_rr_cert.private_key))
+
+
+- type: remove
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder/port
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder/tls_port?
+  value: 6201
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder/server_cert_domain_san?
+  value: app-autoscaler.metricsforwarder.service.cf.internal
+
+- type: remove
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder_mtls/port
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder_mtls/tls_port?
+  value: 6201
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder_mtls/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metrics_forwarder_mtls/server_cert_domain_san?
+  value: app-autoscaler.metricsforwarder.service.cf.internal
+
+
+
+#metricsforwarder (health 6403)
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/health/ca_cert?
+  value: ((app_autoscaler_ca_cert.ca))  
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/health/server_cert?
+  value: ((metricsforwarder_server_rr_cert.certificate))
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=metricsforwarder/properties/autoscaler/metricsforwarder/health/server_key?
+  value: ((metricsforwarder_server_rr_cert.private_key))
+
+- type: remove
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metricsforwarder_health/port
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metricsforwarder_health/tls_port?
+  value: 6403
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metricsforwarder_health/timeout?
+  value: 10s
+- type: replace
+  path: /instance_groups/name=metricsforwarder/jobs/name=route_registrar/properties/route_registrar/routes/name=autoscaler_metricsforwarder_health/server_cert_domain_san?
+  value: app-autoscaler.metricsforwarder.service.cf.internal
+

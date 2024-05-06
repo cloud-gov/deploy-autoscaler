@@ -1,4 +1,5 @@
-# Used
+# Reset default duration
+## Used
 - type: remove
   path: /variables/name=eventgenerator_client_cert/options/duration?
 - type: remove
@@ -13,19 +14,10 @@
   path: /variables/name=scheduler_client_cert/options/duration?
 - type: remove
   path: /variables/name=scheduler_server_cert/options/duration?
-- type: replace
-  path: /variables/name=app_autoscaler_ca_cert/options/duration?
-  value: 3650
-- type: replace
-  path: /variables/name=metric_scraper_ca/options/duration?
-  value: 3650
-# Not used, but covering bases
-- type: remove
-  path: /variables/name=apiserver_server_cert/options/duration?
-- type: remove
-  path: /variables/name=loggr_syslog_agent_cache_tls/options/duration?
 - type: remove
   path: /variables/name=loggr_syslog_agent_metrics/options/duration?
+- type: remove
+  path: /variables/name=loggr_syslog_agent_cache_tls/options/duration?
 - type: remove
   path: /variables/name=loggr_syslog_agent_tls/options/duration?
 - type: remove
@@ -36,5 +28,137 @@
   path: /variables/name=loggr_syslog_binding_cache_tls/options/duration?
 - type: remove
   path: /variables/name=metricsforwarder_autoscaler_metricsforwarder_loggregator_tls/options/duration?
+- type: replace
+  path: /variables/name=app_autoscaler_ca_cert/options/duration?
+  value: 3650
+- type: replace
+  path: /variables/name=metric_scraper_ca/options/duration?
+  value: 3650
+## Not used, but covering bases
+- type: remove
+  path: /variables/name=apiserver_server_cert/options/duration?
 - type: remove
   path: /variables/name=servicebroker_server_cert/options/duration?
+
+
+# Reset default key_length
+
+- type: remove
+  path: /variables/name=eventgenerator_client_cert/options/key_length?
+## Used
+- type: remove
+  path: /variables/name=eventgenerator_client_cert/options/key_length?
+- type: remove
+  path: /variables/name=eventgenerator_server_cert/options/key_length?
+- type: remove
+  path: /variables/name=loggregator_agent_metrics_tls/options/key_length?
+- type: remove
+  path: /variables/name=scalingengine_client_cert/options/key_length?
+- type: remove
+  path: /variables/name=scalingengine_server_cert/options/key_length?
+- type: remove
+  path: /variables/name=scheduler_client_cert/options/key_length?
+- type: remove
+  path: /variables/name=scheduler_server_cert/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_agent_metrics/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_agent_cache_tls/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_agent_tls/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_binding_cache_api_tls/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_binding_cache_metrics/options/key_length?
+- type: remove
+  path: /variables/name=loggr_syslog_binding_cache_tls/options/key_length?
+- type: remove
+  path: /variables/name=metricsforwarder_autoscaler_metricsforwarder_loggregator_tls/options/key_length?
+- type: remove
+  path: /variables/name=app_autoscaler_ca_cert/options/key_length?
+- type: remove
+  path: /variables/name=metric_scraper_ca/options/key_length?
+## Not used, but covering bases
+- type: remove
+  path: /variables/name=apiserver_server_cert/options/key_length?
+- type: remove
+  path: /variables/name=servicebroker_server_cert/options/key_length?
+
+
+
+
+
+
+
+# Add certs for route_registrar to use
+- type: replace
+  path: /variables/-
+  value:
+    name: operator_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.operator.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.operator.service.cf.internal
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: metricsforwarder_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.metricsforwarder.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.metricsforwarder.service.cf.internal
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: scalingengine_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.scalingengine.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.scalingengine.service.cf.internal
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: apiserver_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.apiserver.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.apiserver.service.cf.internal
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: scheduler_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.autoscalerscheduler.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.autoscalerscheduler.service.cf.internal
+    type: certificate
+    update_mode: converge
+
+- type: replace
+  path: /variables/-
+  value:
+    name: eventgenerator_server_rr_cert
+    options:
+      alternative_names:
+      - app-autoscaler.eventgenerator.service.cf.internal
+      ca: app_autoscaler_ca_cert
+      common_name: app-autoscaler.eventgenerator.service.cf.internal
+    type: certificate
+    update_mode: converge

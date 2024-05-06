@@ -11,6 +11,7 @@ This is done in a few steps:
  7. Acceptance Tests
  8. Manual Tests
  9. Install plugin
+ 10. Maintenace & Misc
 
 
 Overall instructions for install are at https://github.com/cloudfoundry/app-autoscaler-release/blob/main/README.md .  While the overall process is correct, many of the details, such as user names and base yaml files to use are incorrect.  These are corrected for in this set of instructions.  With that out of the way, let's deploy!
@@ -182,7 +183,7 @@ OK
 
 ##  6. Enable the broker for an organization
 
-There are two ways of enabling service access: via the pipeline and manually
+There are two ways of enabling service access: via the pipeline and manually:
 
 
 ### Enable via the pipeline (Preferred)
@@ -216,19 +217,23 @@ The app-autoscaler-release as part of their releases includes a tarball with a p
 
 These contain three types of tests:
 
- - broker - ~5 minutes to run
+ - broker - ~5 minutes to run 
  - api - ~5 minutes to run
- - app - currently paused since custom metrics are not working and the test takes ~1 hour to run
+ - app - ~1 hour to run
 
-In the pipeline for `cg-deploy-autoscaler`, each of these tests are configured to run after the deployment of development, staging and production as `acceptance-tests-{api,broker,app}-{development,staging,production}`.  These tests are configured to not run in parallel as each runs a `cleanup.sh` script at the end which deletes orgs with the naming convention `ASATS-*`.
+In the pipeline for `cg-deploy-autoscaler`, each of these tests are configured to run after the deployment of development, staging and production as `acceptance-tests-{api,broker,app}-{development,staging,production}`.  These tests are configured to not run in parallel as each runs a `cleanup.sh` script at the end which deletes orgs with the naming convention `ASATS-*`.  Also resist the urge to add `--nodes=4 --flake-attempts=3` as ginkgo options to `bin/test`, the app tests in particular fail frequently with this enabled.
 
 There is also a set of 3 acceptance tests for development debugging which are commented out, along with a custom resouce towards the bottom.  These exist to debug the bash and other scripting without having to wait for a deployment to development to finish first.  Please comment these back out before submitting PRs.
+
+Finally, the "app" tests for custom metrics require the org/space to be able to communicate to the route registrared autoscaler api endpoint.  The default CF application security group does not allow public url access so the test is customized to at runtime create an organization called `ASATS-Autoscaler-Acceptance-Tests` which has `cf bind-security-group public_networks_egress ...` applied to it.  The other tests (broker and api) use an org/space which named and created by the acceptance tests themselves.  The "broker" tests fail if the `ASATS-Autoscaler-Acceptance-Tests` org is used.  This is why there are two different sets of config files in `acceptance-tests.sh`.
 
 
 ##  8. Manual Tests
 
 
-Create a service instance:
+### CPU Example 
+
+This first test will show how to create an Autoscaler Policy based on CPU, start by creating a service instance:
 
 ```
 cf create-service app-autoscaler  autoscaler-free-plan  my-autoscaler
@@ -307,7 +312,7 @@ memory usage:   256M
 
 Since there is no load on this hello-world style app, you'll then see the number of application instances from 4, to 3, to 2, to 1 over the course of 8 or so minutes.
 
-### To test the scale up, we'll need to add load and drop the threshold
+#### To test the scale up, we'll need to add load and drop the threshold
 
 Start by creating a new policy with an 11% scale up threshold:
 
@@ -384,6 +389,72 @@ memory usage:   256M
 
 Yay!
 
+### Scheduled Example
+
+The policy below has been manipulated to be artificially low to result in the application scaling to 4 app instances during a 30 minute window:
+
+```
+cat << POLICY > my_policy.json
+{
+  "instance_min_count": 1,
+  "instance_max_count": 4,
+  "scaling_rules":
+  [
+   {
+    "metric_type": "memoryused",
+    "breach_duration_secs": 60,
+    "threshold": 0,
+    "operator": ">",
+    "cool_down_secs": 60,
+    "adjustment": "+1"
+   }   
+  ],
+  "schedules": {
+    "timezone": "America/New_York",
+    "specific_date": [
+      {
+        "start_date_time": "2024-04-23T16:30",
+        "end_date_time": "2024-04-23T17:00",
+        "instance_min_count": 1,
+        "instance_max_count": 4,
+        "initial_min_instance_count": 2
+      }
+    ]
+  }
+}
+POLICY
+```
+
+A list of timezones used are defined at [https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html](https://docs.oracle.com/middleware/12211/wcs/tag-ref/MISC/TimeZones.html)
+
+Unbind then bind the service instance to the app to have the policy applied, then verify the policy is in effect:
+
+```
+cf unbind-service my_cf3_app my-autoscaler
+cf bind-service my_cf3_app my-autoscaler -c my_policy.json
+cf asp my_cf3_app
+```
+
+Checked back after 5pm, the following scaling events had occurred:
+
+```
+cf ash my_cf3_app
+
+Retrieving scaling event history for app my_cf3_app...
+Scaling Type            Status          Instance Changes        Time                            Action                                                          Error     
+dynamic                 succeeded       3->4                    2024-04-23T16:32:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds               
+dynamic                 succeeded       2->3                    2024-04-23T16:30:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds               
+dynamic                 succeeded       1->2                    2024-04-23T16:26:13-04:00       +1 instance(s) because memoryused > 0MB for 60 seconds                
+```
+
+Starting from the bottom, you can see when the policy was applied at 4:26PM it immediately bumped the instances to 2 because of the `"initial_min_instance_count": 2`, then starting at 4:30PM it started to add 1 app instance at a time until the max of 4 was reached.
+
+Nifty!
+
+
+### Looking for more examples?
+
+All of the possible policy configurations can be found at [https://github.com/cloudfoundry/app-autoscaler-release/blob/main/docs/policy.md](https://github.com/cloudfoundry/app-autoscaler-release/blob/main/docs/policy.md) (note that custom metrics do not currently work).
 
 ## 9. Install plugin
 
@@ -423,4 +494,14 @@ cpu                     1percentage             2023-09-20T14:00:48-04:00
 ...
 ```
 
+## 10. Maintenace & Misc
 
+In no particular order:
+
+ - There are two CAs and a series of certs which are maintained in credhub.  Rotation of the certs is no different than the CF ones.
+ - There is an ops file called `route-registrar-tls.yml` which lays out the ground work add TLS to the route registrared endpoints and a separate set of `-rr-` certs.  The current implementation only supports mTLS which the CF gorouters don't seem to yet support.  The two CAs created in the autoscaler deployment are also included in the Gorouter's list of CAs enabled by an ops file in cg-deploy-cf.
+ - Scaling of the autoscaler vms themselves will need to be figured out as customers begin to use this more, right now the sizing is optimized to keep costs down.  
+ - Will also need to circle back to the RDS instances, will likely want to add REINDEX jobs to some of the tables which store metrics, scaling history and other tables which have a high frequency of deletes.
+ - The defaults for data retentions for metrics history, scaling history and others are kept at the defaults defined in the spec, an example of this can be seen [here](https://github.com/cloudfoundry/app-autoscaler-release/blob/main/jobs/operator/spec#L215-L217).
+ - Policies with recurring or date schedules still require scaling rules with a metric type defined.  If you want to force an app to scale at a particular make sure that the scaling rules are easy to achieve (ie: cpu > 0)
+ - The dynamic_policy_test.go tests for disk will fail with the default 128MB of memory in Staging and Production (oddly works fine in development), this was bumped in the configuration file to 1024 MB for the `app` tests
