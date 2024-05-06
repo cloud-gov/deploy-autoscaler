@@ -14,6 +14,8 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
+    - get: release
+      trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
@@ -28,6 +30,8 @@ jobs:
   - put: autoscaler-deployment-development
     params: &deploy-params
       manifest: app-autoscaler-release/templates/app-autoscaler.yml
+      releases:
+      - release/app-autoscaler-v*.tgz
       stemcells:
       - cf-stemcell-jammy/*.tgz
       ops_files:
@@ -662,10 +666,16 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: cw5 #main
     paths:
     - ci/*
     - bosh/*
+
+- name: release
+  type: github-release
+  source:
+    owner: cloudfoundry
+    repository: app-autoscaler-release
 
 
 #- name: autoscaler-manifests-test
