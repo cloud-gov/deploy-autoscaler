@@ -4,13 +4,11 @@ set -eu
 echo "######################################################################"
 echo "This is the installed go version: $(go version)"
 echo "This is the installed cf cli version: $(cf -v)"
-echo "This is the ACCEPTANCE_TESTS_VERSION version: ${ACCEPTANCE_TESTS_VERSION}"
 echo "######################################################################"
 
 # Get the tarball with the test
-wget -O app-autoscaler-acceptance-tests.tgz  https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${ACCEPTANCE_TESTS_VERSION}/app-autoscaler-acceptance-tests-v${ACCEPTANCE_TESTS_VERSION}.tgz
-tar -xzf app-autoscaler-acceptance-tests.tgz 
-
+cd release
+tar -xzf app-autoscaler-acceptance*.tgz
 cd acceptance
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
