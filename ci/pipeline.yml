@@ -153,6 +153,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-development]
+    - get: release
+      passed: [deploy-as-development]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -192,6 +195,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-development] 
+    - get: release
+      passed: [deploy-as-development]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -231,6 +237,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-development] 
+    - get: release
+      passed: [deploy-as-development]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -354,6 +363,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-staging]
+    - get: release
+      passed: [deploy-as-staging]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -392,6 +404,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-staging] 
+    - get: release
+      passed: [deploy-as-staging]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -430,6 +445,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-staging] 
+    - get: release
+      passed: [deploy-as-staging]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -552,6 +570,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-production]
+    - get: release
+      passed: [deploy-as-production]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -590,6 +611,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-production] 
+    - get: release
+      passed: [deploy-as-production]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -628,6 +652,9 @@ jobs:
     - get: autoscaler-manifests
       trigger: true
       passed: [deploy-as-production] 
+    - get: release
+      passed: [deploy-as-production]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -676,7 +703,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: cw6 #main
     paths:
     - ci/*
     - bosh/*

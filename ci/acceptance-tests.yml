@@ -12,6 +12,7 @@ image_resource:
 
 inputs:
 - name: autoscaler-manifests
+- name: release
 outputs:
 - name: acceptance-tests-output      #Placeholder, not sure if needed yet
 
