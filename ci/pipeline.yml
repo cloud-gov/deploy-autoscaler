@@ -94,7 +94,6 @@ jobs:
 #  - task: acceptance-tests
 #    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
 #    params:
-#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
 #      CF_ADMIN_USER: ((cf.development.admin_user))
@@ -114,7 +113,6 @@ jobs:
 #  - task: acceptance-tests
 #    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
 #    params:
-#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
 #      CF_ADMIN_USER: ((cf.development.admin_user))
@@ -134,7 +132,6 @@ jobs:
 #  - task: acceptance-tests
 #    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
 #    params:
-#      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
 #      CF_ADMIN_USER: ((cf.development.admin_user))
@@ -159,7 +156,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
       CF_ADMIN_USER: ((cf.development.admin_user))
@@ -201,7 +197,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
       CF_ADMIN_USER: ((cf.development.admin_user))
@@ -243,7 +238,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.development.acceptance_tests_version))
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
       CF_ADMIN_USER: ((cf.development.admin_user))
@@ -369,7 +363,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
       CF_ADMIN_USER: ((cf.staging.admin_user))
@@ -410,7 +403,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
       CF_ADMIN_USER: ((cf.staging.admin_user))
@@ -451,7 +443,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.staging.acceptance_tests_version))
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
       CF_ADMIN_USER: ((cf.staging.admin_user))
@@ -576,7 +567,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
       CF_ADMIN_USER: ((cf.production.admin_user))
@@ -617,7 +607,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
       CF_ADMIN_USER: ((cf.production.admin_user))
@@ -658,7 +647,6 @@ jobs:
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
-      ACCEPTANCE_TESTS_VERSION: ((cf.production.acceptance_tests_version))
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
       CF_ADMIN_USER: ((cf.production.admin_user))
