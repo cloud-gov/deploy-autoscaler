@@ -8,7 +8,7 @@
 # Deploy Development
 
 jobs:
-- name: deploy-as-development
+- name: deploy-app-autoscaler-development
   serial: true
   serial_groups: [development]
   plan:
@@ -149,9 +149,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
     - get: release
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -190,9 +190,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-development] 
+      passed: [deploy-app-autoscaler-development] 
     - get: release
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -231,9 +231,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-development] 
+      passed: [deploy-app-autoscaler-development] 
     - get: release
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -268,16 +268,16 @@ jobs:
 
 # Deploy Staging
 
-- name: deploy-as-staging
+- name: deploy-app-autoscaler-staging
   serial: true
   serial_groups: [staging]
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
     - get: release
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
@@ -286,7 +286,7 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: cf-stemcell-jammy
-      passed: [deploy-as-development]
+      passed: [deploy-app-autoscaler-development]
       trigger: true
     - get: pipeline-tasks
   - task: terraform-secrets
@@ -356,9 +356,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
     - get: release
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -396,9 +396,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-staging] 
+      passed: [deploy-app-autoscaler-staging] 
     - get: release
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -436,9 +436,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-staging] 
+      passed: [deploy-app-autoscaler-staging] 
     - get: release
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -472,16 +472,16 @@ jobs:
 
 # Deploy Production
 
-- name: deploy-as-production
+- name: deploy-app-autoscaler-production
   serial_groups: [production]
   serial: true
   plan:
   - in_parallel:
     - get: app-autoscaler-release
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
     - get: release
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
@@ -490,7 +490,7 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cf-stemcell-jammy
-      passed: [deploy-as-staging]
+      passed: [deploy-app-autoscaler-staging]
       trigger: true
     - get: pipeline-tasks
   - task: terraform-secrets
@@ -560,9 +560,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-production]
+      passed: [deploy-app-autoscaler-production]
     - get: release
-      passed: [deploy-as-production]
+      passed: [deploy-app-autoscaler-production]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -600,9 +600,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-production] 
+      passed: [deploy-app-autoscaler-production] 
     - get: release
-      passed: [deploy-as-production]
+      passed: [deploy-app-autoscaler-production]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
@@ -640,9 +640,9 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-as-production] 
+      passed: [deploy-app-autoscaler-production] 
     - get: release
-      passed: [deploy-as-production]
+      passed: [deploy-app-autoscaler-production]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
