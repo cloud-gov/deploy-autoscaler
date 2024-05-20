@@ -20,7 +20,7 @@ Overall instructions for install are at https://github.com/cloudfoundry/app-auto
 
 ### Create autoscaler module
 
-See https://github.com/cloud-gov/cg-provision/tree/autoscaler for changes made.
+See https://github.com/cloud-gov/cg-provision/pull/1549 for changes made.
 
 
 
