@@ -188,16 +188,20 @@ There are two ways of enabling service access: via the pipeline and manually:
 
 ### Enable via the pipeline (Preferred)
 
-The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml](https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml) to set the list of orgs to enable the broker access.  To add additional organizations, modify the `cg-deploy-autoscaler.yml` secrets file, the list of orgs are space delimited: 
+The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml](https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml) to set the list of orgs to enable the broker access.  There are credhub variables for each of the environments which are space delimited. To  To add additional organizations, modify the following credhub variables: 
 
 ```
-cf:
-  development:
-    service_organization: org1 org2 org3
-  staging:
-    service_organization: org1 org2
-  production:
-    service_organization: org3 org4 org5
+- name: service_organization_development
+  type: value
+  value: org1 org2
+
+- name: service_organization_staging
+  type: value
+  value: org2 org3
+
+- name: service_organization_production
+  type: value
+  value: org1 org2 org3
 ```
 
 ### Manual enabling (Debugging)
@@ -505,3 +509,4 @@ In no particular order:
  - The defaults for data retentions for metrics history, scaling history and others are kept at the defaults defined in the spec, an example of this can be seen [here](https://github.com/cloudfoundry/app-autoscaler-release/blob/main/jobs/operator/spec#L215-L217).
  - Policies with recurring or date schedules still require scaling rules with a metric type defined.  If you want to force an app to scale at a particular make sure that the scaling rules are easy to achieve (ie: cpu > 0)
  - The dynamic_policy_test.go tests for disk will fail with the default 128MB of memory in Staging and Production (oddly works fine in development), this was bumped in the configuration file to 1024 MB for the `app` tests
+ - All pipeline secrets are stored in credhub, the s3 file is no longer used.

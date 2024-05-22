@@ -56,13 +56,13 @@ jobs:
     file: pipeline-tasks/set-plan-visibility.yml
     params:
       CF_API_URL: ((cf.development.api))
-      CF_USERNAME: ((cf.development.admin_user))
-      CF_PASSWORD: ((cf.development.admin_password))
+      CF_USERNAME: ((admin_user_development))
+      CF_PASSWORD: ((admin_password_development))
       CF_ORGANIZATION: ((broker-organization))
       CF_SPACE: ((broker-space))
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.development.services))
-      SERVICE_ORGANIZATION: ((cf.development.service_organization))
+      SERVICE_ORGANIZATION: ((service_organization_development))
   on_success:
     put: slack
     params:
@@ -96,8 +96,8 @@ jobs:
 #    params:
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((cf.development.admin_user))
-#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      CF_ADMIN_USER: ((admin_user_development))
+#      CF_ADMIN_PASSWORD: ((admin_password_development))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: broker
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -115,8 +115,8 @@ jobs:
 #    params:
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((cf.development.admin_user))
-#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      CF_ADMIN_USER: ((admin_user_development))
+#      CF_ADMIN_PASSWORD: ((admin_password_development))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: api
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -134,8 +134,8 @@ jobs:
 #    params:
 #      CF_API: ((cf.development.api))
 #      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((cf.development.admin_user))
-#      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+#      CF_ADMIN_USER: ((admin_user_development))
+#      CF_ADMIN_PASSWORD: ((admin_password_development))
 #      AUTOSCALER_API: ((cf.development.autoscaler_api))
 #      COMPONENT_TO_TEST: app
 #      AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -158,8 +158,8 @@ jobs:
     params:
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      CF_ADMIN_USER: ((admin_user_development))
+      CF_ADMIN_PASSWORD: ((admin_password_development))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -199,8 +199,8 @@ jobs:
     params:
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      CF_ADMIN_USER: ((admin_user_development))
+      CF_ADMIN_PASSWORD: ((admin_password_development))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -240,8 +240,8 @@ jobs:
     params:
       CF_API: ((cf.development.api))
       CF_APPS_DOMAIN: ((cf.development.apps_domain))
-      CF_ADMIN_USER: ((cf.development.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.development.admin_password))
+      CF_ADMIN_USER: ((admin_user_development))
+      CF_ADMIN_PASSWORD: ((admin_password_development))
       AUTOSCALER_API: ((cf.development.autoscaler_api))
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.development.org))
@@ -320,13 +320,13 @@ jobs:
     file: pipeline-tasks/set-plan-visibility.yml
     params:
       CF_API_URL: ((cf.staging.api))
-      CF_USERNAME: ((cf.staging.admin_user))
-      CF_PASSWORD: ((cf.staging.admin_password))
+      CF_USERNAME: ((admin_user_staging))
+      CF_PASSWORD: ((admin_password_staging))
       CF_ORGANIZATION: ((broker-organization))
       CF_SPACE: ((broker-space))
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.staging.services))
-      SERVICE_ORGANIZATION: ((cf.staging.service_organization))
+      SERVICE_ORGANIZATION: ((service_organization_staging))
   on_success:
     put: slack
     params:
@@ -365,8 +365,8 @@ jobs:
     params:
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
-      CF_ADMIN_USER: ((cf.staging.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      CF_ADMIN_USER: ((admin_user_staging))
+      CF_ADMIN_PASSWORD: ((admin_password_staging))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.staging.org))
@@ -405,8 +405,8 @@ jobs:
     params:
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
-      CF_ADMIN_USER: ((cf.staging.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      CF_ADMIN_USER: ((admin_user_staging))
+      CF_ADMIN_PASSWORD: ((admin_password_staging))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.staging.org))
@@ -445,8 +445,8 @@ jobs:
     params:
       CF_API: ((cf.staging.api))
       CF_APPS_DOMAIN: ((cf.staging.apps_domain))
-      CF_ADMIN_USER: ((cf.staging.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.staging.admin_password))
+      CF_ADMIN_USER: ((admin_user_staging))
+      CF_ADMIN_PASSWORD: ((admin_password_staging))
       AUTOSCALER_API: ((cf.staging.autoscaler_api))
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.staging.org))
@@ -524,13 +524,13 @@ jobs:
     file: pipeline-tasks/set-plan-visibility.yml
     params:
       CF_API_URL: ((cf.production.api))
-      CF_USERNAME: ((cf.production.admin_user))
-      CF_PASSWORD: ((cf.production.admin_password))
+      CF_USERNAME: ((admin_user_production))
+      CF_PASSWORD: ((admin_password_production))
       CF_ORGANIZATION: ((broker-organization))
       CF_SPACE: ((broker-space))
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.production.services))
-      SERVICE_ORGANIZATION: ((cf.production.service_organization))
+      SERVICE_ORGANIZATION: ((service_organization_production))
   on_success:
     put: slack
     params:
@@ -569,8 +569,8 @@ jobs:
     params:
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
-      CF_ADMIN_USER: ((cf.production.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      CF_ADMIN_USER: ((admin_user_production))
+      CF_ADMIN_PASSWORD: ((admin_password_production))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.production.org))
@@ -609,8 +609,8 @@ jobs:
     params:
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
-      CF_ADMIN_USER: ((cf.production.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      CF_ADMIN_USER: ((admin_user_production))
+      CF_ADMIN_PASSWORD: ((admin_password_production))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.production.org))
@@ -649,8 +649,8 @@ jobs:
     params:
       CF_API: ((cf.production.api))
       CF_APPS_DOMAIN: ((cf.production.apps_domain))
-      CF_ADMIN_USER: ((cf.production.admin_user))
-      CF_ADMIN_PASSWORD: ((cf.production.admin_password))
+      CF_ADMIN_USER: ((admin_user_production))
+      CF_ADMIN_PASSWORD: ((admin_password_production))
       AUTOSCALER_API: ((cf.production.autoscaler_api))
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.production.org))
@@ -753,29 +753,29 @@ resources:
 - name: autoscaler-deployment-development
   type: bosh-deployment
   source:
-    target: ((bosh.development.environment))
-    client: ((bosh.development.client))
-    client_secret: ((bosh.development.client-secret))
-    ca_cert: ((bosh-ca-cert))
+    target: ((bosh-director-info.development.environment))
+    client: ((bosh-director-info.development.client))
+    client_secret: ((bosh-director-info.development.client_secret))
+    ca_cert: ((bosh-director-info.development.ca_cert))
     deployment: app-autoscaler
 
 
 - name: autoscaler-deployment-staging
   type: bosh-deployment
   source:
-    target: ((bosh.staging.environment))
-    client: ((bosh.staging.client))
-    client_secret: ((bosh.staging.client-secret))
-    ca_cert: ((bosh-ca-cert))
+    target: ((bosh-director-info.staging.environment))
+    client: ((bosh-director-info.staging.client))
+    client_secret: ((bosh-director-info.staging.client_secret))
+    ca_cert: ((bosh-director-info.staging.ca_cert))
     deployment: app-autoscaler
 
 - name: autoscaler-deployment-production
   type: bosh-deployment
   source:
-    target: ((bosh.production.environment))
-    client: ((bosh.production.client))
-    client_secret: ((bosh.production.client-secret))
-    ca_cert: ((bosh-ca-cert))
+    target: ((bosh-director-info.production.environment))
+    client: ((bosh-director-info.production.client))
+    client_secret: ((bosh-director-info.production.client-secret))
+    ca_cert: ((bosh-director-info.production.ca_cert))
     deployment: app-autoscaler
 
 - name: slack
