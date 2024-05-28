@@ -8,6 +8,14 @@
 # Deploy Development
 
 jobs:
+
+- name: set-self
+  plan:
+    - get: autoscaler-manifests
+      resource: autoscaler-manifests
+      trigger: true
+    - set_pipeline: self
+      file: autoscaler-manifests/ci/pipeline.yml
 - name: deploy-app-autoscaler-development
   serial: true
   serial_groups: [development]
@@ -19,6 +27,7 @@ jobs:
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
+      passed: [set-self]
     - get: terraform-yaml
       resource: terraform-yaml-development
       trigger: true
