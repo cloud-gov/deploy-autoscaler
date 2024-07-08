@@ -46,13 +46,10 @@ jobs:
       ops_files:
       - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-dev.yml
       - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-dev.yml
-      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-dev.yml
       - app-autoscaler-release/operations/add-extra-plan.yml
       - autoscaler-manifests/bosh/opsfiles/configure-log-cache-and-forward-metrics-via-mtls-dev.yml
       - app-autoscaler-release/operations/external-db.yml
       - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
-      - app-autoscaler-release/operations/remove-metricsserver.yml
-      - app-autoscaler-release/operations/remove-metricsgateway.yml
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-dev.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
@@ -310,13 +307,10 @@ jobs:
       ops_files:
       - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-stage.yml
       - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-stage.yml
-      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-stage.yml
       - app-autoscaler-release/operations/add-extra-plan.yml
       - autoscaler-manifests/bosh/opsfiles/configure-log-cache-and-forward-metrics-via-mtls-stage.yml
       - app-autoscaler-release/operations/external-db.yml
       - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
-      - app-autoscaler-release/operations/remove-metricsserver.yml
-      - app-autoscaler-release/operations/remove-metricsgateway.yml
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-stage.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
@@ -514,13 +508,10 @@ jobs:
       ops_files:
       - autoscaler-manifests/bosh/opsfiles/instance-identity-cert-from-cf-prod.yml
       - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-prod.yml
-      - autoscaler-manifests/bosh/opsfiles/loggregator-certs-from-cf-prod.yml
       - app-autoscaler-release/operations/add-extra-plan.yml
       - autoscaler-manifests/bosh/opsfiles/configure-log-cache-and-forward-metrics-via-mtls-prod.yml
       - app-autoscaler-release/operations/external-db.yml
       - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
-      - app-autoscaler-release/operations/remove-metricsserver.yml
-      - app-autoscaler-release/operations/remove-metricsgateway.yml
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
       - autoscaler-manifests/bosh/opsfiles/certificates.yml
