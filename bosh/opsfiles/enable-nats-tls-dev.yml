@@ -90,42 +90,6 @@
     from: nats-tls
     deployment: ((cf-deployment-name))
 
-# metricsgateway
-- type: replace
-  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/properties/nats?
-  value:
-    tls:
-      enabled: true
-      client_cert: ((/bosh/cf-development/nats_client_cert.certificate))
-      client_key: ((/bosh/cf-development/nats_client_cert.private_key))
-
-- type: remove
-  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/consumes/nats
-
-- type: replace
-  path: /instance_groups/name=metricsgateway/jobs/name=route_registrar/consumes/nats-tls?
-  value:
-    from: nats-tls
-    deployment: ((cf-deployment-name))
-
-# metricsserver
-- type: replace
-  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/properties/nats?
-  value:
-    tls:
-      enabled: true
-      client_cert: ((/bosh/cf-development/nats_client_cert.certificate))
-      client_key: ((/bosh/cf-development/nats_client_cert.private_key))
-
-- type: remove
-  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/consumes/nats
-
-- type: replace
-  path: /instance_groups/name=metricsserver/jobs/name=route_registrar/consumes/nats-tls?
-  value:
-    from: nats-tls
-    deployment: ((cf-deployment-name))
-
 # eventgenerator
 - type: replace
   path: /instance_groups/name=eventgenerator/jobs/name=route_registrar/properties/nats?

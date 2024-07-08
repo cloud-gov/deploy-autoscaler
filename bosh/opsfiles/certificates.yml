@@ -5,8 +5,6 @@
 - type: remove
   path: /variables/name=eventgenerator_server_cert/options/duration?
 - type: remove
-  path: /variables/name=loggregator_agent_metrics_tls/options/duration?
-- type: remove
   path: /variables/name=scalingengine_client_cert/options/duration?
 - type: remove
   path: /variables/name=scalingengine_server_cert/options/duration?
@@ -50,8 +48,6 @@
   path: /variables/name=eventgenerator_client_cert/options/key_length?
 - type: remove
   path: /variables/name=eventgenerator_server_cert/options/key_length?
-- type: remove
-  path: /variables/name=loggregator_agent_metrics_tls/options/key_length?
 - type: remove
   path: /variables/name=scalingengine_client_cert/options/key_length?
 - type: remove
