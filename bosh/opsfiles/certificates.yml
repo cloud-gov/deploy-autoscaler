@@ -5,8 +5,6 @@
 - type: remove
   path: /variables/name=eventgenerator_server_cert/options/duration?
 - type: remove
-  path: /variables/name=loggregator_agent_metrics_tls/options/duration?
-- type: remove
   path: /variables/name=scalingengine_client_cert/options/duration?
 - type: remove
   path: /variables/name=scalingengine_server_cert/options/duration?
@@ -31,9 +29,6 @@
 - type: replace
   path: /variables/name=app_autoscaler_ca_cert/options/duration?
   value: 3650
-- type: replace
-  path: /variables/name=metric_scraper_ca/options/duration?
-  value: 3650
 ## Not used, but covering bases
 - type: remove
   path: /variables/name=apiserver_server_cert/options/duration?
@@ -50,8 +45,6 @@
   path: /variables/name=eventgenerator_client_cert/options/key_length?
 - type: remove
   path: /variables/name=eventgenerator_server_cert/options/key_length?
-- type: remove
-  path: /variables/name=loggregator_agent_metrics_tls/options/key_length?
 - type: remove
   path: /variables/name=scalingengine_client_cert/options/key_length?
 - type: remove
@@ -76,8 +69,6 @@
   path: /variables/name=metricsforwarder_autoscaler_metricsforwarder_loggregator_tls/options/key_length?
 - type: remove
   path: /variables/name=app_autoscaler_ca_cert/options/key_length?
-- type: remove
-  path: /variables/name=metric_scraper_ca/options/key_length?
 ## Not used, but covering bases
 - type: remove
   path: /variables/name=apiserver_server_cert/options/key_length?
