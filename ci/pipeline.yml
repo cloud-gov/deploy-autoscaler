@@ -88,6 +88,23 @@ jobs:
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
+- name: delete-dev-after-hours
+  plan:
+  - in_parallel:
+    - get: after-hours
+      trigger: true
+    - get: autoscaler-manifests
+      passed: [deploy-app-autoscaler-development]
+    - get: release
+      passed: [deploy-app-autoscaler-development]
+  - task: delete-deployment
+    file: autoscaler-manifests/ci/delete-deployment.yml
+    params:
+      BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.development.environment))
+      BOSH_CLIENT: ((bosh-director-info.development.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
+      BOSH_ENV_NAME: development
 
 ## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
 
@@ -782,6 +799,16 @@ resources:
   type: slack-notification
   source:
     url: ((slack-webhook-url))
+
+
+- name: after-hours
+  type: time
+  source:
+    start: 6:00 PM
+    stop: 7:00 PM
+    location: America/Los_Angeles
+
+
 
 resource_types:
 - name: registry-image
