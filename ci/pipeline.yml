@@ -89,6 +89,8 @@ jobs:
       icon_url: ((slack-icon-url))
 
 - name: delete-dev-after-hours
+  serial: true
+  serial_groups: [development]
   plan:
   - in_parallel:
     - get: after-hours
