@@ -1,0 +1,26 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: general-task
+    aws_region: us-gov-west-1
+    tag: latest   
+
+inputs:
+- name: autoscaler-manifests
+- name: release
+
+
+run:
+  path: autoscaler-manifests/ci/delete-deployment.sh
+
+params:
+  BOSH_CA_CERT:
+  BOSH_ENVIRONMENT:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
+  BOSH_ENV_NAME:
