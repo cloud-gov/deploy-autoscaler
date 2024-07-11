@@ -368,7 +368,25 @@ jobs:
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
-
+- name: delete-staging-after-hours
+  serial: true
+  serial_groups: [staging]
+  plan:
+  - in_parallel:
+    - get: after-hours
+      trigger: true
+    - get: autoscaler-manifests
+      passed: [deploy-app-autoscaler-staging]
+    - get: release
+      passed: [deploy-app-autoscaler-staging]
+  - task: delete-deployment
+    file: autoscaler-manifests/ci/delete-deployment.yml
+    params:
+      BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.staging.environment))
+      BOSH_CLIENT: ((bosh-director-info.staging.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.staging.client_secret))
+      BOSH_ENV_NAME: staging
 
 ## Acceptance tests for Staging
 
