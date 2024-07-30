@@ -215,7 +215,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-development] 
+      passed: [deploy-app-autoscaler-development]
     - get: release
       passed: [deploy-app-autoscaler-development]
       trigger: true
@@ -256,7 +256,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-development] 
+      passed: [deploy-app-autoscaler-development]
     - get: release
       passed: [deploy-app-autoscaler-development]
       trigger: true
@@ -306,7 +306,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ] 
+      passed: [acceptance-tests-api-development, acceptance-tests-broker-development ]
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -317,7 +317,7 @@ jobs:
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-staging
-    params: 
+    params:
       manifest: app-autoscaler-release/templates/app-autoscaler.yml
       releases:
       - release/app-autoscaler-v*.tgz
@@ -436,7 +436,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-staging] 
+      passed: [deploy-app-autoscaler-staging]
     - get: release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
@@ -476,7 +476,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-staging] 
+      passed: [deploy-app-autoscaler-staging]
     - get: release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
@@ -525,7 +525,7 @@ jobs:
       trigger: true
     - get: autoscaler-manifests
       resource: autoscaler-manifests
-      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging] 
+      passed: [acceptance-tests-api-staging, acceptance-tests-broker-staging]
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
@@ -536,7 +536,7 @@ jobs:
   - task: terraform-secrets
     file: autoscaler-manifests/ci/terraform-secrets.yml
   - put: autoscaler-deployment-production
-    params: 
+    params:
       manifest: app-autoscaler-release/templates/app-autoscaler.yml
       releases:
       - release/app-autoscaler-v*.tgz
@@ -637,7 +637,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-production] 
+      passed: [deploy-app-autoscaler-production]
     - get: release
       passed: [deploy-app-autoscaler-production]
       trigger: true
@@ -677,7 +677,7 @@ jobs:
   - in_parallel:
     - get: autoscaler-manifests
       trigger: true
-      passed: [deploy-app-autoscaler-production] 
+      passed: [deploy-app-autoscaler-production]
     - get: release
       passed: [deploy-app-autoscaler-production]
       trigger: true
@@ -850,9 +850,13 @@ resource_types:
     tag: latest
 
 - name: bosh-deployment
-  type: docker-image
+  type: registry-image
   source:
-    repository: cloudfoundry/bosh-deployment-resource
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: bosh-deployment-resource
+    aws_region: us-gov-west-1
+    tag: latest
 
 - name: s3-iam
   type: registry-image
