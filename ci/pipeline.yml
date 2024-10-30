@@ -547,7 +547,7 @@ jobs:
       - autoscaler-manifests/bosh/opsfiles/enable-nats-tls-prod.yml
       - app-autoscaler-release/operations/add-extra-plan.yml
       - autoscaler-manifests/bosh/opsfiles/configure-log-cache-and-forward-metrics-via-mtls-prod.yml
-      - app-autoscaler-release/operations/external-db.yml
+      - autoscaler-manifests/bosh/opsfiles/external-db.yml
       - autoscaler-manifests/bosh/opsfiles/bosh-dns-cf-deployment-name.yml
       - app-autoscaler-release/operations/enable-scheduler-logging.yml
       - autoscaler-manifests/bosh/opsfiles/cf-uaa-client-secret-prod.yml
