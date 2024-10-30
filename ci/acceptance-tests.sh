@@ -85,6 +85,8 @@ export CONFIG=$PWD/integration_config.json
 # Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
 export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
+# Make sure that the clean up runs regardless of the test output
+set +e
 
 # Run the actual test, pick one: {broker, api, app}
 echo "######################################################################"
