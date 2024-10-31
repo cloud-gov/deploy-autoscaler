@@ -48,7 +48,10 @@ if [[ "$COMPONENT_TO_TEST" = "app" ]]; then
   "existing_organization": "${AUTOSCALER_CF_ORG}",
   "use_existing_space": true,
   "existing_space": "${AUTOSCALER_CF_SPACE}",
-  
+
+  "keep_user_at_suite_end": true,
+  "test_password": "${CF_ADMIN_PASSWORD}",
+
   "node_memory_limit": 1024
 }
 EOF
@@ -95,6 +98,9 @@ echo "######################################################################"
 ./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
 
 
+
+echo "Bailing for debug, not running cleanup, exit 0"
+exit 0
 
 # Perform the cleanup (drops any created org that is named ASATS*)
 echo "######################################################################"
