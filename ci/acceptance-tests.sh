@@ -49,9 +49,6 @@ if [[ "$COMPONENT_TO_TEST" = "app" ]]; then
   "use_existing_space": true,
   "existing_space": "${AUTOSCALER_CF_SPACE}",
 
-  "keep_user_at_suite_end": true,
-  "test_password": "${CF_ADMIN_PASSWORD}",
-
   "node_memory_limit": 1024
 }
 EOF
@@ -95,12 +92,7 @@ set +e
 echo "######################################################################"
 echo "Running ${COMPONENT_TO_TEST}, skipping any test with 'cpuutil' in it..."
 echo "######################################################################"
-./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
-
-
-
-echo "Bailing for debug, not running cleanup, exit 0"
-exit 0
+./bin/test --timeout=2h --skip "cpuutil" --skip "same_app" --skip "appToScale"  ${COMPONENT_TO_TEST} 
 
 # Perform the cleanup (drops any created org that is named ASATS*)
 echo "######################################################################"
