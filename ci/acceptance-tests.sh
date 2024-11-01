@@ -85,14 +85,20 @@ export CONFIG=$PWD/integration_config.json
 # Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
 export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
+# Make sure that the clean up runs regardless of the test output
+set +e
+
 
 # Run the actual test, pick one: {broker, api, app}
+# For help configuring ginkgo tests see https://onsi.github.io/ginkgo/
 echo "######################################################################"
 echo "Running ${COMPONENT_TO_TEST}, skipping any test with 'cpuutil' in it..."
 echo "######################################################################"
 ./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
+test_return_code=$?
 
-
+# Exit if any of the remaining commands fail
+set -x
 
 # Perform the cleanup (drops any created org that is named ASATS*)
 echo "######################################################################"
@@ -104,3 +110,8 @@ cf login -a ${CF_API} -u ${CF_ADMIN_USER} -p "${CF_ADMIN_PASSWORD}" -o cloud-gov
 echo "######################################################################"
 echo "~FIN~"
 echo "######################################################################"
+
+# If the tests errored out, run the cleanup but exit non-zero so concourse shows a failure
+if [[ $test_return_code -ne 0 ]]; then
+  exit $test_return_code
+fi
