@@ -738,7 +738,7 @@ resources:
   source:
     owner: cloudfoundry
     repository: app-autoscaler-release
-
+    access_token: ((github-access-token))
 
 #- name: autoscaler-manifests-test
 #  type: git
