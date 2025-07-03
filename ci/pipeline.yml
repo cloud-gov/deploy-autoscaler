@@ -69,15 +69,6 @@ jobs:
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.development.services))
       SERVICE_ORGANIZATION: ((service_organization_development))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -189,15 +180,6 @@ jobs:
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -230,15 +212,6 @@ jobs:
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the api component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -271,15 +244,6 @@ jobs:
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the app component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -349,15 +313,6 @@ jobs:
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.staging.services))
       SERVICE_ORGANIZATION: ((service_organization_staging))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed CF App Autoscaler on staging
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel:  "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -411,15 +366,6 @@ jobs:
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on staging
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -451,15 +397,6 @@ jobs:
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the api component of CF App Autoscaler on staging
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -491,15 +428,6 @@ jobs:
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.staging.org))
       AUTOSCALER_CF_SPACE: ((cf.staging.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the app component of CF App Autoscaler on staging
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -568,15 +496,6 @@ jobs:
       BROKER_NAME: ((broker-name))
       SERVICES: ((cf.production.services))
       SERVICE_ORGANIZATION: ((service_organization_production))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed CF App Autoscaler on prod
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -612,15 +531,6 @@ jobs:
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the broker component of CF App Autoscaler on production
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -652,15 +562,6 @@ jobs:
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the api component of CF App Autoscaler on production
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
@@ -692,15 +593,6 @@ jobs:
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.production.org))
       AUTOSCALER_CF_SPACE: ((cf.production.space))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully tested the app component of CF App Autoscaler on production
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
   on_failure:
     put: slack
     params:
