@@ -71,11 +71,11 @@ jobs:
       SERVICE_ORGANIZATION: ((service_organization_development))
   on_failure:
     put: slack
-    params:
+    params: &slack-failure-params
       text: |
         :x: FAILED to deploy CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
+      channel: ((slack-channel-notifications))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -183,12 +183,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the broker component of CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 
 - name: acceptance-tests-api-development
@@ -215,12 +213,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the api component of CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 
 - name: acceptance-tests-app-development
@@ -247,12 +243,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the app component of CF App Autoscaler on development
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 
 # Deploy Staging
@@ -316,12 +310,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED to deploy CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 - name: delete-staging-after-hours
   serial: true
@@ -369,12 +361,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the broker component of CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-api-staging
   serial_groups: [staging]
@@ -400,12 +390,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the api component of CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 - name: acceptance-tests-app-staging
   serial_groups: [staging]
@@ -431,12 +419,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the app component of CF App Autoscaler on staging
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 # Deploy Production
 
@@ -596,15 +582,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED testing the app component of CF App Autoscaler on production
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: "#cg-platform-news"
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-
-
 
 # Resources
 
