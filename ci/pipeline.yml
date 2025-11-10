@@ -14,8 +14,8 @@ jobs:
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
-    - set_pipeline: self
-      file: autoscaler-manifests/ci/pipeline.yml
+#    - set_pipeline: self
+#      file: autoscaler-manifests/ci/pipeline.yml
 - name: deploy-app-autoscaler-development
   serial: true
   serial_groups: [development]
@@ -601,7 +601,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: v15 #main
     paths:
     - ci/*
     - bosh/*
