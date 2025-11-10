@@ -7,7 +7,7 @@ echo "This is the installed cf cli version: $(cf -v)"
 echo "######################################################################"
 
 # Get the tarball with the test
-cd release
+#cd release
 #tar -xzf app-autoscaler-acceptance*.tgz
 #cd acceptance
 
@@ -15,7 +15,8 @@ export AS_VERSION="14.3.0"
 
 # Clone the repo with the acceptance tests
 wget https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${AS_VERSION}/app-autoscaler-acceptance-tests-v${AS_VERSION}.tgz
-tar -xzf app-autoscaler-acceptance*.tgz
+
+tar -xzf app-autoscaler-acceptance-tests-v14.3.0.tgz
 cd acceptance
 
 
