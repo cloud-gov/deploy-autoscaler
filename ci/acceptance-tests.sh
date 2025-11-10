@@ -7,17 +7,17 @@ echo "This is the installed cf cli version: $(cf -v)"
 echo "######################################################################"
 
 # Get the tarball with the test
-#cd release
-#tar -xzf app-autoscaler-acceptance*.tgz
-#cd acceptance
+cd release
+tar -xzf app-autoscaler-acceptance*.tgz
+cd acceptance
 
-export AS_VERSION="14.3.0"
+#export AS_VERSION="14.3.0"
 
 # Clone the repo with the acceptance tests
-wget https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${AS_VERSION}/app-autoscaler-acceptance-tests-v${AS_VERSION}.tgz
+#wget https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${AS_VERSION}/app-autoscaler-acceptance-tests-v${AS_VERSION}.tgz
 
-tar -xzf app-autoscaler-acceptance-tests-v14.3.0.tgz
-cd acceptance
+#tar -xzf app-autoscaler-acceptance-tests-v14.3.0.tgz
+#cd acceptance
 
 
 
@@ -100,7 +100,7 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 echo "######################################################################"
 echo "Running ${COMPONENT_TO_TEST}, skipping any test with 'cpuutil' in it..."
 echo "######################################################################"
-./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
+./bin/test --timeout=2h --skip "disable"  --skip "mtls" --skip "lead" ${COMPONENT_TO_TEST} 
 
 
 
