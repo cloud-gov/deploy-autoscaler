@@ -17,7 +17,7 @@
 - type: remove
   path: /instance_groups/name=metricsforwarder/jobs/name=loggr-syslog-binding-cache?
 
-# add configuration
+# add configuration - this now exists in the base yaml, but we override with cf deployment name and point to real cf credhub certs instead of copying them over and getting them later out of sync
 - type: replace
   path: /instance_groups/name=metricsforwarder/jobs/-
   value:
