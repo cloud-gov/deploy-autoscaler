@@ -8,6 +8,8 @@ echo "######################################################################"
 
 # Get the tarball with the test
 cd release
+tar -xzf app-autoscaler-acceptance*.tgz
+cd acceptance
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
 
