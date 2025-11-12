@@ -766,3 +766,4 @@ resource_types:
     repository: github-release-resource
     aws_region: us-gov-west-1
     tag: latest
+  

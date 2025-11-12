@@ -8,17 +8,6 @@ echo "######################################################################"
 
 # Get the tarball with the test
 cd release
-#tar -xzf app-autoscaler-acceptance*.tgz
-#cd acceptance
-
-export AS_VERSION="14.3.0"
-
-# Clone the repo with the acceptance tests
-wget https://github.com/cloudfoundry/app-autoscaler-release/releases/download/v${AS_VERSION}/app-autoscaler-acceptance-tests-v${AS_VERSION}.tgz
-tar -xzf app-autoscaler-acceptance*.tgz
-cd acceptance
-
-
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
 
