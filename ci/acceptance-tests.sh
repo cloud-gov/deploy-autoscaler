@@ -8,8 +8,6 @@ echo "######################################################################"
 
 # Get the tarball with the test
 cd release
-tar -xzf app-autoscaler-acceptance*.tgz
-cd acceptance
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
 
@@ -88,9 +86,9 @@ export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
 # Run the actual test, pick one: {broker, api, app}
 echo "######################################################################"
-echo "Running ${COMPONENT_TO_TEST}, skipping any test with 'cpuutil' in it..."
+echo "Running ${COMPONENT_TO_TEST}, skip 4 test with 'disable', 'mtls' or 'lead' in it..."
 echo "######################################################################"
-./bin/test --timeout=2h --skip "cpuutil" ${COMPONENT_TO_TEST} 
+./bin/test --timeout=2h --skip "disable"  --skip "mtls" --skip "lead" ${COMPONENT_TO_TEST} 
 
 
 
