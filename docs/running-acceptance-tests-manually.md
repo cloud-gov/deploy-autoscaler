@@ -18,7 +18,7 @@ export COMPONENT_TO_TEST=app
 
 # Select the version of autoscaler acceptance tests to use, should use the version of autoscaler releases deployed
 #export AS_VERSION="14.4.1"
-export AS_VERSION="14.3.0"
+#export AS_VERSION="14.3.0"
 export AS_VERSION="15.9.0"
 
 # Clone the repo with the acceptance tests
