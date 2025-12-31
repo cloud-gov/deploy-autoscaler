@@ -21,6 +21,7 @@ jobs:
   plan:
   - in_parallel:
     - get: app-autoscaler-release
+    - get: autoscaler-acceptance
     - get: release
       trigger: true
     - get: autoscaler-manifests
@@ -210,6 +211,9 @@ jobs:
     - get: app-autoscaler-release
       passed: [deploy-app-autoscaler-development]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-development]
+      trigger: true
     - get: release
       passed: [deploy-app-autoscaler-development]
       trigger: true
@@ -394,6 +398,9 @@ jobs:
     - get: app-autoscaler-release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-staging]
+      trigger: true
     - get: release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
@@ -501,7 +508,7 @@ jobs:
       passed: [deploy-app-autoscaler-production]
       trigger: true
     - get: autoscaler-acceptance
-      passed: [deploy-app-autoscaler-prod]
+      passed: [deploy-app-autoscaler-production]
       trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml

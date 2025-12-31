@@ -82,7 +82,7 @@ fi
 export CONFIG=$PWD/integration_config.json
 
 # Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
-export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
+# export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64  #No longer provided in the tarball, using built-in ginkgo instead
 
 
 # Run the actual test, pick one: {broker, api, app}
