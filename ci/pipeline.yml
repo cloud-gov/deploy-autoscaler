@@ -583,11 +583,17 @@ resources:
     - bosh/*
 
 - name: autoscaler-acceptance     #Repo with acceptance tests
-  type: git
+  type: github-release
   source:
-    uri: https://github.com/cloudfoundry/app-autoscaler
-    branch: main
-    tag_filter: "v*"
+    owner: cloudfoundry
+    repository: app-autoscaler
+    access_token: ((github-access-token))
+
+#  type: git
+#  source:
+#    uri: https://github.com/cloudfoundry/app-autoscaler
+#    branch: main
+#    tag_filter: "v*"
 
 
 - name: release                  #Used to detect when new bosh releases are cut

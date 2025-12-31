@@ -6,8 +6,9 @@ echo "This is the installed go version: $(go version)"
 echo "This is the installed cf cli version: $(cf -v)"
 echo "######################################################################"
 
-# Get the repo with the tests
-cd autoscaler-acceptance
+# Get the tarball with the test
+cd autoscaler-acceptance #release
+tar -xzf app-autoscaler-acceptance*.tgz
 cd acceptance
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 
@@ -82,7 +83,7 @@ fi
 export CONFIG=$PWD/integration_config.json
 
 # Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
-# export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64  #No longer provided in the tarball, using built-in ginkgo instead
+export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
 
 
 # Run the actual test, pick one: {broker, api, app}
