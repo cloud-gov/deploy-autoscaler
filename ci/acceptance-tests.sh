@@ -6,9 +6,8 @@ echo "This is the installed go version: $(go version)"
 echo "This is the installed cf cli version: $(cf -v)"
 echo "######################################################################"
 
-# Get the tarball with the test
-cd release
-tar -xzf app-autoscaler-acceptance*.tgz
+# Get the repo with the tests
+cd autoscaler-acceptance
 cd acceptance
 
 if [[ "$COMPONENT_TO_TEST" = "app" ]]; then 

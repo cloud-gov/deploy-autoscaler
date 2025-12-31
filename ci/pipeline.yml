@@ -3,7 +3,6 @@
 # Notes:
 # - Do not run the acceptance tests in parallel, there is a cleanup.sh script which will conflict with other runs in parallel, serial_groups are the enforcement of this
 # - As of now, the "app" acceptance tests fail on custom metrics.  Downstream deploys are explicitly not dependent on the app tests to pass for now.
-# - The three "*-debug" jobs can be commented out once autoscaler is in normal operating mode, these exist to shorten the test cycle of debugging the acceptance tests against dev
 
 # Deploy Development
 
@@ -14,8 +13,8 @@ jobs:
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
-    - set_pipeline: self
-      file: autoscaler-manifests/ci/pipeline.yml
+#    - set_pipeline: self
+#      file: autoscaler-manifests/ci/pipeline.yml
 - name: deploy-app-autoscaler-development
   serial: true
   serial_groups: [development]
@@ -99,63 +98,6 @@ jobs:
       BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
       BOSH_ENV_NAME: development
 
-## Enable these 3 to more quickly debug changes to acceptance-tests.sh, bypasses the need to first deploy autoscaler to dev
-
-#- name: acceptance-tests-broker-development-debug
-#  serial_groups: [development, debug]
-#  plan:
-#  - in_parallel:
-#    - get: autoscaler-manifests-test                               #Modified resource to do testing
-#      trigger: true
-#  - task: acceptance-tests
-#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-#    params:
-#      CF_API: ((cf.development.api))
-#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((admin_user_development))
-#      CF_ADMIN_PASSWORD: ((admin_password_development))
-#      AUTOSCALER_API: ((cf.development.autoscaler_api))
-#      COMPONENT_TO_TEST: broker
-#      AUTOSCALER_CF_ORG: ((cf.development.org))
-#      AUTOSCALER_CF_SPACE: ((cf.development.space))
-#
-#
-#- name: acceptance-tests-api-development-debug
-#  serial_groups: [development, debug]
-#  plan:
-#  - in_parallel:
-#    - get: autoscaler-manifests-test                               #Modified resource to do testing
-#      trigger: true
-#  - task: acceptance-tests
-#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-#    params:
-#      CF_API: ((cf.development.api))
-#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((admin_user_development))
-#      CF_ADMIN_PASSWORD: ((admin_password_development))
-#      AUTOSCALER_API: ((cf.development.autoscaler_api))
-#      COMPONENT_TO_TEST: api
-#      AUTOSCALER_CF_ORG: ((cf.development.org))
-#      AUTOSCALER_CF_SPACE: ((cf.development.space))
-#
-#
-#- name: acceptance-tests-app-development-debug
-#  serial_groups: [development, debug]
-#  plan:
-#  - in_parallel:
-#    - get: autoscaler-manifests-test                               #Modified resource to do testing
-#      trigger: true
-#  - task: acceptance-tests
-#    file: autoscaler-manifests-test/ci/acceptance-tests-debug.yml  #Modified resource to do testing
-#    params:
-#      CF_API: ((cf.development.api))
-#      CF_APPS_DOMAIN: ((cf.development.apps_domain))
-#      CF_ADMIN_USER: ((admin_user_development))
-#      CF_ADMIN_PASSWORD: ((admin_password_development))
-#      AUTOSCALER_API: ((cf.development.autoscaler_api))
-#      COMPONENT_TO_TEST: app
-#      AUTOSCALER_CF_ORG: ((cf.development.org))
-#      AUTOSCALER_CF_SPACE: ((cf.development.space))
 
 ## Acceptance tests for dev
 
@@ -169,6 +111,9 @@ jobs:
     - get: release
       passed: [deploy-app-autoscaler-development]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-development]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -180,13 +125,13 @@ jobs:
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_failure:
-    put: slack
-    params:
-      <<: *slack-failure-params
-      text: |
-        :x: FAILED testing the broker component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+#  on_failure:
+#    put: slack
+#    params:
+#      <<: *slack-failure-params
+#      text: |
+#        :x: FAILED testing the broker component of CF App Autoscaler on development
+#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 
 
 - name: acceptance-tests-api-development
@@ -197,6 +142,9 @@ jobs:
       trigger: true
       passed: [deploy-app-autoscaler-development]
     - get: release
+      passed: [deploy-app-autoscaler-development]
+      trigger: true
+    - get: autoscaler-acceptance
       passed: [deploy-app-autoscaler-development]
       trigger: true
   - task: acceptance-tests
@@ -210,13 +158,13 @@ jobs:
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_failure:
-    put: slack
-    params:
-      <<: *slack-failure-params
-      text: |
-        :x: FAILED testing the api component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+#  on_failure:
+#    put: slack
+#    params:
+#      <<: *slack-failure-params
+#      text: |
+#        :x: FAILED testing the api component of CF App Autoscaler on development
+#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 
 
 - name: acceptance-tests-app-development
@@ -227,6 +175,9 @@ jobs:
       trigger: true
       passed: [deploy-app-autoscaler-development]
     - get: release
+      passed: [deploy-app-autoscaler-development]
+      trigger: true
+    - get: autoscaler-acceptance
       passed: [deploy-app-autoscaler-development]
       trigger: true
   - task: acceptance-tests
@@ -240,13 +191,13 @@ jobs:
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-  on_failure:
-    put: slack
-    params:
-      <<: *slack-failure-params
-      text: |
-        :x: FAILED testing the app component of CF App Autoscaler on development
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+#  on_failure:
+#    put: slack
+#    params:
+#      <<: *slack-failure-params
+#      text: |
+#        :x: FAILED testing the app component of CF App Autoscaler on development
+#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 
 
 # Deploy Staging
@@ -347,6 +298,9 @@ jobs:
     - get: release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-staging]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -376,6 +330,9 @@ jobs:
     - get: release
       passed: [deploy-app-autoscaler-staging]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-staging]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -403,6 +360,9 @@ jobs:
       trigger: true
       passed: [deploy-app-autoscaler-staging]
     - get: release
+      passed: [deploy-app-autoscaler-staging]
+      trigger: true
+    - get: autoscaler-acceptance
       passed: [deploy-app-autoscaler-staging]
       trigger: true
   - task: acceptance-tests
@@ -506,6 +466,9 @@ jobs:
     - get: release
       passed: [deploy-app-autoscaler-production]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-production]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -537,6 +500,9 @@ jobs:
     - get: release
       passed: [deploy-app-autoscaler-production]
       trigger: true
+    - get: autoscaler-acceptance
+      passed: [deploy-app-autoscaler-prod]
+      trigger: true
   - task: acceptance-tests
     file: autoscaler-manifests/ci/acceptance-tests.yml
     params:
@@ -566,6 +532,9 @@ jobs:
       trigger: true
       passed: [deploy-app-autoscaler-production]
     - get: release
+      passed: [deploy-app-autoscaler-production]
+      trigger: true
+    - get: autoscaler-acceptance
       passed: [deploy-app-autoscaler-production]
       trigger: true
   - task: acceptance-tests
@@ -601,10 +570,18 @@ resources:
   type: git
   source:
     uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-    branch: main
+    branch: new-acceptance #main
     paths:
     - ci/*
     - bosh/*
+
+- name: autoscaler-acceptance     #Repo with acceptance tests
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/app-autoscaler
+    branch: main
+    tag_filter: "v*"
+
 
 - name: release                  #Used to detect when new bosh releases are cut
   type: github-release
@@ -612,15 +589,6 @@ resources:
     owner: cloudfoundry
     repository: app-autoscaler-release
     access_token: ((github-access-token))
-
-#- name: autoscaler-manifests-test
-#  type: git
-#  source:
-#    uri: https://github.com/cloud-gov/cg-deploy-autoscaler.git
-#    branch: main
-#    paths:
-#    - ci/*
-#    - bosh/*
 
 - name: pipeline-tasks
   type: git
