@@ -78,20 +78,35 @@ else
 EOF
 fi
 
-
-
 export CONFIG=$PWD/integration_config.json
 
-# Set GINKGO_BINARY since its provided in the tarball, omit this to have it built at runtime
-export GINKGO_BINARY=$PWD/ginkgo_v2_linux_amd64
-
-
-# Run the actual test, pick one: {broker, api, app}
 echo "######################################################################"
 echo "Running ${COMPONENT_TO_TEST}, skip 4 test with 'disable', 'mtls' or 'lead' in it..."
 echo "######################################################################"
-./bin/test --timeout=2h --skip "disable"  --skip "mtls" --skip "lead" ${COMPONENT_TO_TEST} 
 
+case $COMPONENT_TO_TEST in
+  "api")
+       echo "Running API tests"
+       cd api
+       ./api_linux_amd64.test
+       break
+       ;;
+   "app")
+       echo "Running App tests"
+       cd app
+       ./app_linux_amd64.test --ginkgo.timeout 2h --ginkgo.skip "disable"  --ginkgo.skip "mtls" --ginkgo.skip "lead"
+       break
+       ;;
+   "broker")
+       echo "Running Broker tests"
+       cd broker
+       ./broker_linux_amd64.test 
+       break
+       ;;
+   *) echo "Invalid selection $COMPONENT_TO_TEST";;
+esac
+
+cd ..
 
 
 # Perform the cleanup (drops any created org that is named ASATS*)
