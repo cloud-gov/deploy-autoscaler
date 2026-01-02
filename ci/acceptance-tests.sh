@@ -7,7 +7,7 @@ echo "This is the installed cf cli version: $(cf -v)"
 echo "######################################################################"
 
 # Get the tarball with the test
-cd autoscaler-acceptance #release
+cd autoscaler-acceptance
 tar -xzf app-autoscaler-acceptance*.tgz
 cd acceptance
 
