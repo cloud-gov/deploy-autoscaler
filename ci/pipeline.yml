@@ -13,8 +13,8 @@ jobs:
     - get: autoscaler-manifests
       resource: autoscaler-manifests
       trigger: true
-#    - set_pipeline: self
-#      file: autoscaler-manifests/ci/pipeline.yml
+    - set_pipeline: self
+      file: autoscaler-manifests/ci/pipeline.yml
 - name: deploy-app-autoscaler-development
   serial: true
   serial_groups: [development]
@@ -126,13 +126,6 @@ jobs:
       COMPONENT_TO_TEST: broker
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-#  on_failure:
-#    put: slack
-#    params:
-#      <<: *slack-failure-params
-#      text: |
-#        :x: FAILED testing the broker component of CF App Autoscaler on development
-#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 
 
 - name: acceptance-tests-api-development
@@ -159,14 +152,6 @@ jobs:
       COMPONENT_TO_TEST: api
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-#  on_failure:
-#    put: slack
-#    params:
-#      <<: *slack-failure-params
-#      text: |
-#        :x: FAILED testing the api component of CF App Autoscaler on development
-#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-
 
 - name: acceptance-tests-app-development
   serial_groups: [development]
@@ -192,13 +177,6 @@ jobs:
       COMPONENT_TO_TEST: app
       AUTOSCALER_CF_ORG: ((cf.development.org))
       AUTOSCALER_CF_SPACE: ((cf.development.space))
-#  on_failure:
-#    put: slack
-#    params:
-#      <<: *slack-failure-params
-#      text: |
-#        :x: FAILED testing the app component of CF App Autoscaler on development
-#        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 
 
 # Deploy Staging
@@ -588,13 +566,6 @@ resources:
     owner: cloudfoundry
     repository: app-autoscaler
     access_token: ((github-access-token))
-
-#  type: git
-#  source:
-#    uri: https://github.com/cloudfoundry/app-autoscaler
-#    branch: main
-#    tag_filter: "v*"
-
 
 - name: release                  #Used to detect when new bosh releases are cut
   type: github-release
