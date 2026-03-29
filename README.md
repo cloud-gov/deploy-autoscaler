@@ -188,7 +188,7 @@ There are two ways of enabling service access: via the pipeline and manually:
 
 ### Enable via the pipeline (Preferred)
 
-The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml](https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml) to set the list of orgs to enable the broker access.  There are credhub variables for each of the environments which are space delimited. To  To add additional organizations, modify the following credhub variables: 
+The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml](https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-plan-visibility.yml) to set the list of orgs to enable the broker access.  There are credhub variables for each of the environments which are space delimited. To add additional organizations, modify the following credhub variables: 
 
 ```
 - name: service_organization_development
@@ -203,6 +203,25 @@ The pipeline uses [https://github.com/cloud-gov/cg-pipeline-tasks/blob/main/set-
   type: value
   value: org1 org2 org3
 ```
+
+#### Cheat Sheet for enabling a new org via the pipeline
+
+Terminal session:
+```sh
+cd <cg-scripts>
+./jumpbox <cloud-gov-target> credhub
+# view current values
+credhub get -n /concourse/main/deploy-autoscaler/service_organization_production
+# set new values
+credhub set -n /concourse/main/deploy-autoscaler/service_organization_production \
+   -t value -v "org-a org-b cloud-gov cloud-gov-operators"
+# confirm new values
+credhub get -n /concourse/main/deploy-autoscaler/service_organization_production
+```
+Then kick off a new pipeline task:
+
+- Visit: <https://ci.fr.cloud.gov/teams/main/pipelines/deploy-autoscaler/jobs/deploy-app-autoscaler-production>
+- Click the `➕` sign for a new build
 
 ### Manual enabling (Debugging)
 
