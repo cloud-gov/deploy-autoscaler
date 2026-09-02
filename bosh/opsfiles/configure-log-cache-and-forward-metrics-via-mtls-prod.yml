@@ -45,6 +45,11 @@
         cert: ((!loggr_syslog_binding_cache_metrics.certificate))
         key: ((!loggr_syslog_binding_cache_metrics.private_key))
         server_name: metrics.config.is.required.by.job.specification.but.not.needed.in.our.case
+      loggregator: 
+        tls:
+          ca_cert: ((!loggr_syslog_agent_tls.ca))
+          cert: ((!loggr_syslog_agent_tls.certificate))
+          key: ((!loggr_syslog_agent_tls.private_key))
       api: # connection to CF cloud controller
         # here are dummy values configured since there is no need to query the CC API for all bindings.
         # if a customer wants to ever receive their own custom metrics in their own syslog-drain, we would need to configure this properly.
